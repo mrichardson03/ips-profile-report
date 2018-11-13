@@ -54,7 +54,14 @@ class VulnerabilityProfile:
         return VulnerabilityProfile(name, rules)
 
 
-class DefaultVulnerabilityProfile:
+class DefaultVulnerabilityProfile(VulnerabilityProfile):
+
+    def __init__(self):
+        pass
+
+    @property
+    def name(self):
+        return "default"
 
     def blocks_criticals(self):
         return False
@@ -69,7 +76,14 @@ class DefaultVulnerabilityProfile:
         return False
 
 
-class StrictVulnerabilityProfile:
+class StrictVulnerabilityProfile(VulnerabilityProfile):
+
+    def __init__(self):
+        pass
+
+    @property
+    def name(self):
+        return "strict"
 
     def blocks_criticals(self):
         return True
@@ -181,6 +195,10 @@ class SecurityRule:
         self._disabled = disabled
         self._security_profile_group = security_profile_group
         self._vulnerability_profile = vulnerability_profile
+
+    @property
+    def name(self):
+        return self._name
 
     @property
     def action(self):
@@ -362,7 +380,7 @@ def parse_xml(xml_doc):
                         if vp.blocks_high():
                             rule_counts[dg_name]['blocks_high'] += 1
                         if vp.blocks_medium():
-                            rule_counts[dg_name]['blocks_medium'] + 1
+                            rule_counts[dg_name]['blocks_medium'] += 1
 
                 elif vp is None:
                     if r.security_profile_group is not None or r.vulnerability_profile is not None:
