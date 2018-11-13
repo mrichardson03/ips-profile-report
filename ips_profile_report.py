@@ -5,7 +5,6 @@ __metaclass__ = type
 
 import argparse
 import csv
-import os
 import tarfile
 import xml.etree.ElementTree
 
@@ -396,7 +395,7 @@ def parse_xml(xml_doc):
 
 def csv_output(output_file, rule_counts):
     with open(output_file, 'w') as csv_file:
-        writer = csv.writer(csv_file, lineterminator=os.linesep)
+        writer = csv.writer(csv_file)
 
         writer.writerow([
             'Device Group Name', 'Total Rules', 'Allow Rules',
