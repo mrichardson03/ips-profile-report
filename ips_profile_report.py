@@ -111,19 +111,25 @@ class VulnerabilityProfileRule:
         self.packet_capture = packet_capture
 
     def blocks_criticals(self):
-        if 'critical' in self.severity and self.action in ['drop', 'reset-both']:
+        if 'critical' in self.severity and self.action in [
+            'block-ip', 'drop', 'reset-both', 'reset-client', 'reset-server'
+        ]:
             return True
         else:
             return False
 
     def blocks_high(self):
-        if 'high' in self.severity and self.action in ['drop', 'reset-both']:
+        if 'high' in self.severity and self.action in [
+            'block-ip', 'drop', 'reset-both', 'reset-client', 'reset-server'
+        ]:
             return True
         else:
             return False
 
     def blocks_medium(self):
-        if 'medium' in self.severity and self.action in ['drop', 'reset-both']:
+        if 'medium' in self.severity and self.action in [
+            'block-ip', 'drop', 'reset-both', 'reset-client', 'reset-server'
+        ]:
             return True
         else:
             return False
