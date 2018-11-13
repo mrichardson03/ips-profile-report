@@ -394,7 +394,7 @@ def parse_xml(xml_doc):
 
 
 def csv_output(output_file, rule_counts):
-    with open(output_file, 'w') as csv_file:
+    with open(output_file, 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)
 
         writer.writerow([
