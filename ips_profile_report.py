@@ -4,7 +4,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 import argparse
-import csv
 import tarfile
 import xml.etree.ElementTree
 
@@ -480,7 +479,7 @@ def excel_output(output_file, rule_counts):
     for dg in sorted(rule_counts):
         c = rule_counts[dg]
 
-        if c['total_rules'] > 0:
+        if c['allow'] > 0:
             # Device Group Name
             worksheet.write(row, 0, dg)
 
