@@ -537,38 +537,6 @@ def excel_output(output_file, rule_counts):
 
             row += 1
 
-    # Column Conditional Formatting
-    critical_pct_cond_cells = (
-        f"{xl_rowcol_to_cell(1, 5)}:{xl_rowcol_to_cell(row - 1, 5)}"
-    )
-    worksheet.conditional_format(critical_pct_cond_cells, {'type': '3_color_scale'})
-
-    high_pct_cond_cells = (
-        f"{xl_rowcol_to_cell(1, 7)}:{xl_rowcol_to_cell(row - 1, 7)}"
-    )
-    worksheet.conditional_format(high_pct_cond_cells, {'type': '3_color_scale'})
-
-    medium_pct_cond_cells = (
-        f"{xl_rowcol_to_cell(1, 9)}:{xl_rowcol_to_cell(row - 1, 9)}"
-    )
-    worksheet.conditional_format(medium_pct_cond_cells, {'type': '3_color_scale'})
-
-    alert_only_pct_cond_cells = (
-        f"{xl_rowcol_to_cell(1, 11)}:{xl_rowcol_to_cell(row - 1, 11)}"
-    )
-    worksheet.conditional_format(
-        alert_only_pct_cond_cells,
-        {'type': '3_color_scale', 'min_color': '#6ABC7D', 'max_color': '#f46B6E'}
-    )
-
-    critical_high_medium_pct_cond_cells = (
-        f"{xl_rowcol_to_cell(1, 13)}:{xl_rowcol_to_cell(row - 1, 13)}"
-    )
-    worksheet.conditional_format(
-        critical_high_medium_pct_cond_cells,
-        {'type': '3_color_scale'}
-    )
-
     # Skip a row for totals
     row += 1
 
@@ -649,6 +617,38 @@ def excel_output(output_file, rule_counts):
     )
     worksheet.write(
         row, 13, total_critical_high_medium_pct, centered_pct_footer_format
+    )
+
+    # Column Conditional Formatting
+    critical_pct_cond_cells = (
+        f"{xl_rowcol_to_cell(1, 5)}:{xl_rowcol_to_cell(row, 5)}"
+    )
+    worksheet.conditional_format(critical_pct_cond_cells, {'type': '3_color_scale'})
+
+    high_pct_cond_cells = (
+        f"{xl_rowcol_to_cell(1, 7)}:{xl_rowcol_to_cell(row, 7)}"
+    )
+    worksheet.conditional_format(high_pct_cond_cells, {'type': '3_color_scale'})
+
+    medium_pct_cond_cells = (
+        f"{xl_rowcol_to_cell(1, 9)}:{xl_rowcol_to_cell(row, 9)}"
+    )
+    worksheet.conditional_format(medium_pct_cond_cells, {'type': '3_color_scale'})
+
+    alert_only_pct_cond_cells = (
+        f"{xl_rowcol_to_cell(1, 11)}:{xl_rowcol_to_cell(row, 11)}"
+    )
+    worksheet.conditional_format(
+        alert_only_pct_cond_cells,
+        {'type': '3_color_scale', 'min_color': '#6ABC7D', 'max_color': '#f46B6E'}
+    )
+
+    critical_high_medium_pct_cond_cells = (
+        f"{xl_rowcol_to_cell(1, 13)}:{xl_rowcol_to_cell(row, 13)}"
+    )
+    worksheet.conditional_format(
+        critical_high_medium_pct_cond_cells,
+        {'type': '3_color_scale'}
     )
 
     workbook.close()
