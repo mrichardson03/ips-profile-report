@@ -144,8 +144,9 @@ def main():
         else:
             username = input('Username: ')
             password = getpass.getpass('Password: ')
+
             xapi = pan.xapi.PanXapi(
-                hostname=args.hostname, username=username, password=password
+                hostname=args.hostname, api_username=username, api_password=password
             )
 
         xapi.op('<show><predefined><xpath>/predefined/threats/vulnerability</xpath></predefined></show>')
@@ -153,7 +154,7 @@ def main():
         output = xapi.xml_result()
 
     except pan.xapi.PanXapiError as e:
-        print("XML-API Error: {e}".format(e))
+        print("XML-API Error: {0}".format(e))
         sys.exit(1)
 
     vulns = parse_xml(output)
