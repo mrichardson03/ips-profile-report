@@ -57,7 +57,8 @@ class VulnerabilitySignature(namedtuple('VulnerabilitySignature', [
 
         affected_host = None
         if 'affected-host' in xmldict['entry']:
-            affected_host = list(xmldict['entry']['affected-host'].keys())
+            if xmldict['entry']['affected-host'] is not None:
+                affected_host = list(xmldict['entry']['affected-host'].keys())
 
         return VulnerabilitySignature(
             threat_id, threat_name, vendor_id, cve_id, category, severity,
@@ -117,7 +118,8 @@ def excel_output(output_file, vulns):
         worksheet.write(row, 5, vuln.severity)
         worksheet.write(row, 6, vuln.min_version)
         worksheet.write(row, 7, vuln.max_version)
-        worksheet.write(row, 8, ', '.join(vuln.affected_host))
+        if vuln.affected_host:
+            worksheet.write(row, 8, ', '.join(vuln.affected_host))
         worksheet.write(row, 9, vuln.default_action)
 
         row += 1
