@@ -8,63 +8,11 @@ import getpass
 import sys
 import xml.etree.ElementTree
 
-from collections import namedtuple
-
 import pan.xapi
 import xmltodict
 import xlsxwriter
 
-
-class VulnerabilitySignature(namedtuple('VulnerabilitySignature', [
-    'threat_id', 'name', 'vendor_id', 'cve_id', 'category', 'severity',
-    'min_version', 'max_version', 'affected_host', 'default_action'
-])):
-
-    @staticmethod
-    def create_from_xmldict(xmldict):
-        threat_id = xmldict['entry']['@name']
-        threat_name = xmldict['entry']['threatname']
-
-        vendor_id = None
-        if 'vendor' in xmldict['entry']:
-            if isinstance(xmldict['entry']['vendor']['member'], str):
-                vendor_id = [xmldict['entry']['vendor']['member']]
-            else:
-                vendor_id = xmldict['entry']['vendor']['member']
-
-        cve_id = None
-        if 'cve' in xmldict['entry']:
-            if isinstance(xmldict['entry']['cve']['member'], str):
-                cve_id = [xmldict['entry']['cve']['member']]
-            else:
-                cve_id = xmldict['entry']['cve']['member']
-
-        category = xmldict['entry']['category']
-        severity = xmldict['entry']['severity']
-
-        min_version = None
-        max_version = None
-
-        if 'engine-version' in xmldict['entry']:
-            if '@min' in xmldict['entry']['engine-version']:
-                min_version = xmldict['entry']['engine-version']['@min']
-            if '@max' in xmldict['entry']['engine-version']:
-                max_version = xmldict['entry']['engine-version']['@max']
-
-        default_action = None
-        if 'default-action' in xmldict['entry']:
-            default_action = xmldict['entry']['default-action']
-
-        affected_host = None
-        if 'affected-host' in xmldict['entry']:
-            if xmldict['entry']['affected-host'] is not None:
-                affected_host = list(xmldict['entry']['affected-host'].keys())
-
-        return VulnerabilitySignature(
-            threat_id, threat_name, vendor_id, cve_id, category, severity,
-            min_version, max_version, affected_host, default_action
-        )
-
+from panos_util import VulnerabilitySignature
 
 def parse_xml(xml_doc):
     tree = xml.etree.ElementTree.fromstring(xml_doc)
