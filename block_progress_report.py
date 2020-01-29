@@ -13,6 +13,7 @@ import xmltodict
 import xlsxwriter
 from xlsxwriter.utility import xl_rowcol_to_cell
 
+import json
 
 class VulnerabilityProfile:
 
@@ -46,11 +47,21 @@ class VulnerabilityProfile:
 
     @staticmethod
     def create_from_xmldict(xmldict):
+        print(json.dumps(xmldict, indent=4))
         name = xmldict['entry']['@name']
         rules = list()
-        for rule in xmldict['entry']['rules']['entry']:
-            new_rule = VulnerabilityProfileRule.create_from_xmldict(rule)
-            rules.append(new_rule)
+
+        if 'rules' in xmldict['entry']:
+
+            if isinstance(xmldict['entry']['rules']['entry'], list):
+                for rule in xmldict['entry']['rules']['entry']:
+                    new_rule = VulnerabilityProfileRule.create_from_xmldict(rule)
+                    rules.append(new_rule)
+            else:
+                rule = xmldict['entry']['rules']['entry']
+                new_rule = VulnerabilityProfileRule.create_from_xmldict(rule)
+                rules.append(new_rule)
+
         return VulnerabilityProfile(name, rules)
 
 
