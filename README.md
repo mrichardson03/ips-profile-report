@@ -1,6 +1,6 @@
 # Palo Alto IPS Reporting Scripts
 
-![python-test](https://github.com/mrichardson03/ips-reports/workflows/python-test/badge.svg)
+[![python-test](https://github.com/mrichardson03/ips-reports/workflows/python-test/badge.svg)](https://github.com/mrichardson03/ips-reports/actions?query=workflow%3Apython-test)
 
 Additional IPS reports for Palo Alto Networks firewalls.
 
