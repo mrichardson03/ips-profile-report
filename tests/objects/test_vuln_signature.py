@@ -1,6 +1,6 @@
 import xmltodict
 
-from panos_util import VulnerabilitySignature
+from panos.objects import VulnerabilitySignature
 
 STANDARD = """
 <entry name="31673" p="yes">
