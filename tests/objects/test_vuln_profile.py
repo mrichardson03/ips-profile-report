@@ -1,11 +1,15 @@
 import xmltodict
 
-from panos_util import VulnerabilityProfile
+from panos.objects import VulnerabilityProfile
 
-INTERNAL_VP = """
-<entry name="Internal-VP">
+EMPTY = """
+<entry name="Empty"/>
+"""
+
+BLOCK_ALL = """
+<entry name="Block-All">
     <rules>
-        <entry name="Block-Critical-High">
+        <entry name="Block-Critical-High-Medium">
             <action>
                 <reset-both/>
             </action>
@@ -15,6 +19,7 @@ INTERNAL_VP = """
             <severity>
                 <member>critical</member>
                 <member>high</member>
+                <member>medium</member>
             </severity>
             <cve>
                 <member>any</member>
@@ -34,7 +39,6 @@ INTERNAL_VP = """
             <severity>
                 <member>low</member>
                 <member>informational</member>
-                <member>medium</member>
             </severity>
             <cve>
                 <member>any</member>
@@ -90,14 +94,25 @@ EXCEPTION_VP = """
 """
 
 
-def test_internal_vp():
-    xmldict = xmltodict.parse(INTERNAL_VP)
+def test_empty():
+    xmldict = xmltodict.parse(EMPTY)
     vp = VulnerabilityProfile.create_from_xmldict(xmldict)
 
-    assert vp.name == 'Internal-VP'
+    assert vp.name == 'Empty'
+    assert vp.blocks_criticals() is False
+    assert vp.blocks_high() is False
+    assert vp.blocks_medium() is False
+    assert vp.alert_only() is False
+
+
+def test_block_all():
+    xmldict = xmltodict.parse(BLOCK_ALL)
+    vp = VulnerabilityProfile.create_from_xmldict(xmldict)
+
+    assert vp.name == 'Block-All'
     assert vp.blocks_criticals() is True
     assert vp.blocks_high() is True
-    assert vp.blocks_medium() is False
+    assert vp.blocks_medium() is True
 
 
 def test_alert_only_vp():
