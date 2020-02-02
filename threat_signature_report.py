@@ -12,7 +12,7 @@ import pan.xapi
 import xmltodict
 import xlsxwriter
 
-from panos_util import VulnerabilitySignature
+from panos.objects import VulnerabilitySignature
 
 def parse_xml(xml_doc):
     tree = xml.etree.ElementTree.fromstring(xml_doc)

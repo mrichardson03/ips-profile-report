@@ -13,9 +13,9 @@ import xmltodict
 import xlsxwriter
 from xlsxwriter.utility import xl_rowcol_to_cell
 
-from panos_util import (
+from panos.policies import SecurityRule
+from panos.objects import (
     SecurityProfileGroup,
-    SecurityRule,
     VulnerabilityProfile,
     DefaultVulnerabilityProfile,
     StrictVulnerabilityProfile
