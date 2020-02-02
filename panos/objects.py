@@ -1,5 +1,6 @@
 from collections import namedtuple
 
+
 class VulnerabilityProfile:
 
     def __init__(self, name, rules):
@@ -104,28 +105,31 @@ class VulnerabilityProfileRule:
         self.packet_capture = packet_capture
 
     def blocks_criticals(self):
-        if 'critical' in self.severity and self.action in [
-            'block-ip', 'drop', 'reset-both', 'reset-client', 'reset-server'
-        ]:
-            return True
-        else:
-            return False
+        if self.severity is not None and 'critical' in self.severity:
+            if self.action is not None and self.action in [
+                'block-ip', 'drop', 'reset-both', 'reset-client', 'reset-server'
+            ]:
+                return True
+
+        return False
 
     def blocks_high(self):
-        if 'high' in self.severity and self.action in [
-            'block-ip', 'drop', 'reset-both', 'reset-client', 'reset-server'
-        ]:
-            return True
-        else:
-            return False
+        if self.severity is not None and 'high' in self.severity:
+            if self.action is not None and self.action in [
+                'block-ip', 'drop', 'reset-both', 'reset-client', 'reset-server'
+            ]:
+                return True
+
+        return False
 
     def blocks_medium(self):
-        if 'medium' in self.severity and self.action in [
-            'block-ip', 'drop', 'reset-both', 'reset-client', 'reset-server'
-        ]:
-            return True
-        else:
-            return False
+        if self.severity is not None and 'medium' in self.severity:
+            if self.action is not None and self.action in [
+                'block-ip', 'drop', 'reset-both', 'reset-client', 'reset-server'
+            ]:
+                return True
+
+        return False
 
     def alert_only(self):
         if self.action == 'alert':
@@ -222,6 +226,7 @@ class VulnerabilitySignature(namedtuple('VulnerabilitySignature', [
             threat_id, threat_name, vendor_id, cve_id, category, severity,
             min_version, max_version, affected_host, default_action
         )
+
 
 class SecurityProfileGroup:
 

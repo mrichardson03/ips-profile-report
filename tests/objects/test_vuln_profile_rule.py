@@ -7,8 +7,8 @@ EMPTY = """
 <entry name="Empty"/>
 """
 
-EMPTY_TAGS = """
-<entry name="Empty-Multi">
+EMPTY_CHILD = """
+<entry name="Empty-Child">
     <vendor-id/>
     <cve/>
     <severity/>
@@ -16,41 +16,48 @@ EMPTY_TAGS = """
 </entry>
 """
 
-BLOCK_CRITICAL_HIGH = """
-<entry name="Block-Critical-High">
-    <action>
-        <reset-both/>
-    </action>
+SINGLE_CHILD = """
+<entry name="Single-Child">
+    <vendor-id>
+        <member>one</member>
+    </vendor-id>
+    <cve>
+        <member>one</member>
+    </cve>
+    <severity>
+        <member>one</member>
+    </severity>
+</entry>
+"""
+
+MULTI_CHILD = """
+<entry name="Multi-Child">
     <vendor-id>
         <member>one</member>
         <member>two</member>
     </vendor-id>
-    <severity>
-        <member>critical</member>
-        <member>high</member>
-    </severity>
     <cve>
         <member>one</member>
         <member>two</member>
     </cve>
-    <threat-name>any</threat-name>
-    <host>any</host>
-    <category>any</category>
-    <packet-capture>single-packet</packet-capture>
+    <severity>
+        <member>one</member>
+        <member>two</member>
+    </severity>
 </entry>
 """
 
-DEFAULT_MEDIUM_LOW_INFO = """
-<entry name="Default-Medium-Low-Info">
+BLOCKS = """
+<entry name="Blocks">
     <action>
-        <default/>
+        <reset-both/>
     </action>
     <vendor-id>
         <member>any</member>
     </vendor-id>
     <severity>
-        <member>low</member>
-        <member>informational</member>
+        <member>critical</member>
+        <member>high</member>
         <member>medium</member>
     </severity>
     <cve>
@@ -59,12 +66,12 @@ DEFAULT_MEDIUM_LOW_INFO = """
     <threat-name>any</threat-name>
     <host>any</host>
     <category>any</category>
-    <packet-capture>disable</packet-capture>
+    <packet-capture>single-packet</packet-capture>
 </entry>
 """
 
-ALERT_ALL = """
-<entry name="Alert-All">
+ALERT = """
+<entry name="Alert">
     <action>
         <alert/>
     </action>
@@ -89,53 +96,56 @@ def test_empty():
     xmldict = xmltodict.parse(EMPTY)
     rule = VulnerabilityProfileRule.create_from_xmldict(xmldict['entry'])
 
+    assert rule.name == 'Empty'
 
-def test_empty_tags():
-    xmldict = xmltodict.parse(EMPTY_TAGS)
-    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict['entry'])
-
-    
-
-
-def test_block_critical_high():
-    xmldict = xmltodict.parse(BLOCK_CRITICAL_HIGH)
-    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict['entry'])
-
-    assert rule.name == 'Block-Critical-High'
-    assert rule.blocks_criticals() is True
-    assert rule.blocks_high() == True
+    assert rule.blocks_criticals() == False
+    assert rule.blocks_high() == False
     assert rule.blocks_medium() == False
     assert rule.alert_only() == False
 
-    assert rule.vendor_id == ['one', 'two']
-    assert rule.severity == ['critical', 'high']
-    assert rule.cve == ['one', 'two']
+
+def test_empty_child():
+    xmldict = xmltodict.parse(EMPTY_CHILD)
+    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict['entry'])
+
+
+def test_single_child():
+    xmldict = xmltodict.parse(SINGLE_CHILD)
+    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict['entry'])
+
+
+def test_multi_child():
+    xmldict = xmltodict.parse(MULTI_CHILD)
+    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict['entry'])
+
+
+def test_blocks():
+    xmldict = xmltodict.parse(BLOCKS)
+    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict['entry'])
+
+    assert rule.name == 'Blocks'
+    assert rule.blocks_criticals() == True
+    assert rule.blocks_high() == True
+    assert rule.blocks_medium() == True
+    assert rule.alert_only() == False
+
+    assert rule.action == 'reset-both'
+    assert rule.vendor_id == ['any']
+    assert rule.severity == ['critical', 'high', 'medium']
+    assert rule.cve == ['any']
     assert rule.threat_name == 'any'
     assert rule.host == 'any'
     assert rule.packet_capture == 'single-packet'
 
 
-def test_default_medium_low_info():
-    xmldict = xmltodict.parse(DEFAULT_MEDIUM_LOW_INFO)
+def test_alert():
+    xmldict = xmltodict.parse(ALERT)
     rule = VulnerabilityProfileRule.create_from_xmldict(xmldict['entry'])
 
-    assert rule.name == 'Default-Medium-Low-Info'
-    assert rule.action == 'default'
-
+    assert rule.name == 'Alert'
     assert rule.blocks_criticals() == False
     assert rule.blocks_high() == False
     assert rule.blocks_medium() == False
-
-    assert rule.vendor_id == ['any']
-
-    assert rule.packet_capture == 'disable'
-
-
-def test_alert():
-    xmldict = xmltodict.parse(ALERT_ALL)
-    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict['entry'])
-
-    assert rule.name == 'Alert-All'
-    assert rule.action == 'alert'
-
     assert rule.alert_only() == True
+
+    assert rule.action == 'alert'

@@ -52,8 +52,8 @@ BLOCK_ALL = """
 </entry>
 """
 
-ALERT_ONLY_VP = """
-<entry name="Alert-Only-VP">
+ALERT_ONLY = """
+<entry name="Alert-Only">
     <rules>
         <entry name="Alert-All">
             <action>
@@ -89,11 +89,6 @@ ALERT_ONLY_VP = """
 </entry>
 """
 
-EXCEPTION_VP = """
-<entry name="Exception-VP"/>
-"""
-
-
 def test_empty():
     xmldict = xmltodict.parse(EMPTY)
     vp = VulnerabilityProfile.create_from_xmldict(xmldict)
@@ -117,21 +112,11 @@ def test_block_all():
 
 
 def test_alert_only_vp():
-    xmldict = xmltodict.parse(ALERT_ONLY_VP)
+    xmldict = xmltodict.parse(ALERT_ONLY)
     vp = VulnerabilityProfile.create_from_xmldict(xmldict)
 
-    assert vp.name == 'Alert-Only-VP'
+    assert vp.name == 'Alert-Only'
     assert vp.blocks_criticals() is False
     assert vp.blocks_high() is False
     assert vp.blocks_medium() is False
     assert vp.alert_only() is True
-
-
-def test_exception_vp():
-    xmldict = xmltodict.parse(EXCEPTION_VP)
-    vp = VulnerabilityProfile.create_from_xmldict(xmldict)
-
-    assert vp.name == 'Exception-VP'
-    assert vp.blocks_criticals() is False
-    assert vp.blocks_high() is False
-    assert vp.blocks_medium() is False
