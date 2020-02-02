@@ -113,6 +113,7 @@ def test_block_all():
     assert vp.blocks_criticals() is True
     assert vp.blocks_high() is True
     assert vp.blocks_medium() is True
+    assert vp.alert_only() is False
 
 
 def test_alert_only_vp():
@@ -123,6 +124,7 @@ def test_alert_only_vp():
     assert vp.blocks_criticals() is False
     assert vp.blocks_high() is False
     assert vp.blocks_medium() is False
+    assert vp.alert_only() is True
 
 
 def test_exception_vp():
