@@ -14,6 +14,7 @@ import xlsxwriter
 
 from panos.objects import VulnerabilitySignature
 
+
 def parse_xml(xml_doc):
     tree = xml.etree.ElementTree.fromstring(xml_doc)
 

@@ -54,6 +54,8 @@ class SecurityRule:
             elif 'profiles' in xmldict['entry']['profile-setting']:
                 if xmldict['entry']['profile-setting']['profiles'] is not None:
                     if 'vulnerability' in xmldict['entry']['profile-setting']['profiles']:
-                        vulnerability_profile = list(xmldict['entry']['profile-setting']['profiles']['vulnerability'].values())[0]
+                        vulnerability_profile = list(
+                            xmldict['entry']['profile-setting']['profiles']['vulnerability'].values()
+                        )[0]
 
         return SecurityRule(name, action, disabled, security_profile_group, vulnerability_profile)
