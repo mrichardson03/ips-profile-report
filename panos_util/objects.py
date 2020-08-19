@@ -283,37 +283,44 @@ class VulnerabilitySignature(
         )
 
 
-class SecurityProfileGroup:
-    def __init__(self, name, virus, spyware, vulnerability, wildfire_analysis):
-        self._name = name
-        self._virus = virus
-        self._spyware = spyware
-        self._vulnerability = vulnerability
-        self._wildfire_analysis = wildfire_analysis
-
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def vulnerability(self):
-        return self._vulnerability
-
+class SecurityProfileGroup(
+    namedtuple(
+        "SecurityProfileGroup",
+        [
+            "name",
+            "virus",
+            "spyware",
+            "vulnerability",
+            "url_filtering",
+            "wildfire_analysis",
+        ],
+    )
+):
     @staticmethod
     def create_from_xmldict(xmldict):
-        name = xmldict["entry"]["@name"]
-        virus = None
-        if "virus" in xmldict["entry"]:
-            virus = list(xmldict["entry"]["virus"].values())[0]
-        spyware = None
-        if "spyware" in xmldict["entry"]:
-            spyware = list(xmldict["entry"]["spyware"].values())[0]
-        vulnerability = None
-        if "vulnerability" in xmldict["entry"]:
-            vulnerability = list(xmldict["entry"]["vulnerability"].values())[0]
-        wildfire_analysis = None
-        if "wildfire_analysis" in xmldict["entry"]:
-            wildfire_analysis = list(xmldict["entry"]["wildfire-analysis"].values())[0]
+        x = xmldict["entry"]
+
+        name = x.get("@name", None)
+        virus = x.get("virus", None)
+        if virus is not None:
+            virus = list(virus.values())[0]
+
+        spyware = x.get("spyware", None)
+        if spyware is not None:
+            spyware = list(spyware.values())[0]
+
+        vulnerability = x.get("vulnerability", None)
+        if vulnerability is not None:
+            vulnerability = list(vulnerability.values())[0]
+
+        url_filtering = x.get("url-filtering", None)
+        if url_filtering is not None:
+            url_filtering = list(url_filtering.values())[0]
+
+        wildfire_analysis = x.get("wildfire-analysis", None)
+        if wildfire_analysis is not None:
+            wildfire_analysis = list(wildfire_analysis.values())[0]
+
         return SecurityProfileGroup(
-            name, virus, spyware, vulnerability, wildfire_analysis
+            name, virus, spyware, vulnerability, url_filtering, wildfire_analysis
         )
