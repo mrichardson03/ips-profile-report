@@ -109,6 +109,14 @@ def test_empty_child():
 
     assert rule.name == "Empty-Child"
 
+    assert rule.action is None
+    assert rule.vendor_id is None
+    assert rule.severity is None
+    assert rule.cve is None
+    assert rule.threat_name is None
+    assert rule.host is None
+    assert rule.packet_capture is None
+
 
 def test_single_child():
     xmldict = xmltodict.parse(SINGLE_CHILD)
@@ -116,12 +124,28 @@ def test_single_child():
 
     assert rule.name == "Single-Child"
 
+    assert rule.action is None
+    assert rule.vendor_id == ["one"]
+    assert rule.severity == ["one"]
+    assert rule.cve == ["one"]
+    assert rule.threat_name is None
+    assert rule.host is None
+    assert rule.packet_capture is None
+
 
 def test_multi_child():
     xmldict = xmltodict.parse(MULTI_CHILD)
     rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
 
     assert rule.name == "Multi-Child"
+
+    assert rule.action is None
+    assert rule.vendor_id == ["one", "two"]
+    assert rule.severity == ["one", "two"]
+    assert rule.cve == ["one", "two"]
+    assert rule.threat_name is None
+    assert rule.host is None
+    assert rule.packet_capture is None
 
 
 def test_blocks():
@@ -154,3 +178,9 @@ def test_alert():
     assert rule.alert_only() is True
 
     assert rule.action == "alert"
+    assert rule.vendor_id == ["any"]
+    assert rule.severity == ["any"]
+    assert rule.cve == ["any"]
+    assert rule.threat_name == "any"
+    assert rule.host == "any"
+    assert rule.packet_capture == "disable"
