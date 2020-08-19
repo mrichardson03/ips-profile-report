@@ -11,13 +11,8 @@ import xlsxwriter
 import xmltodict
 from xlsxwriter.utility import xl_rowcol_to_cell
 
-from panos_util import (
-    DefaultVulnerabilityProfile,
-    SecurityProfileGroup,
-    SecurityRule,
-    StrictVulnerabilityProfile,
-    VulnerabilityProfile,
-)
+from panos_util.objects import SecurityProfileGroup, VulnerabilityProfile
+from panos_util.policies import SecurityRule
 
 __metaclass__ = type
 

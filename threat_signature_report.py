@@ -11,7 +11,7 @@ import pan.xapi
 import xlsxwriter
 import xmltodict
 
-from panos_util import VulnerabilitySignature
+from panos_util.objects import VulnerabilitySignature
 
 __metaclass__ = type
 

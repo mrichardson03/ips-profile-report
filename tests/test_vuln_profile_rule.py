@@ -1,6 +1,6 @@
 import xmltodict
 
-from panos_util import VulnerabilityProfileRule
+from panos_util.objects import VulnerabilityProfileRule
 
 BLOCK_CRITICAL_HIGH = """
 <entry name="Block-Critical-High">
