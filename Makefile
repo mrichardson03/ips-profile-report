@@ -44,11 +44,11 @@ lint:
 	flake8
 
 format:
-	isort --recursive --atomic panos_util
+	isort --atomic panos_util
 	black .
 
 check-format:
-	isort --recursive --atomic --check-only panos_util
+	isort --atomic --check-only panos_util
 	black --check .
 
 test:
