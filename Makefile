@@ -75,5 +75,5 @@ dist: clean
 
 sync-deps:
 	poetry export -f requirements.txt > requirements.txt
-	dephell deps convert
-	black setup.py
+	# dephell deps convert
+	# black setup.py
