@@ -97,25 +97,31 @@ def test_empty():
 
     assert rule.name == "Empty"
 
-    assert rule.blocks_criticals() == False
-    assert rule.blocks_high() == False
-    assert rule.blocks_medium() == False
-    assert rule.alert_only() == False
+    assert rule.blocks_criticals() is False
+    assert rule.blocks_high() is False
+    assert rule.blocks_medium() is False
+    assert rule.alert_only() is False
 
 
 def test_empty_child():
     xmldict = xmltodict.parse(EMPTY_CHILD)
     rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
 
+    assert rule.name == "Empty-Child"
+
 
 def test_single_child():
     xmldict = xmltodict.parse(SINGLE_CHILD)
     rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
 
+    assert rule.name == "Single-Child"
+
 
 def test_multi_child():
     xmldict = xmltodict.parse(MULTI_CHILD)
     rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
+
+    assert rule.name == "Multi-Child"
 
 
 def test_blocks():
@@ -123,10 +129,10 @@ def test_blocks():
     rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
 
     assert rule.name == "Blocks"
-    assert rule.blocks_criticals() == True
-    assert rule.blocks_high() == True
-    assert rule.blocks_medium() == True
-    assert rule.alert_only() == False
+    assert rule.blocks_criticals() is True
+    assert rule.blocks_high() is True
+    assert rule.blocks_medium() is True
+    assert rule.alert_only() is False
 
     assert rule.action == "reset-both"
     assert rule.vendor_id == ["any"]
@@ -142,9 +148,9 @@ def test_alert():
     rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
 
     assert rule.name == "Alert"
-    assert rule.blocks_criticals() == False
-    assert rule.blocks_high() == False
-    assert rule.blocks_medium() == False
-    assert rule.alert_only() == True
+    assert rule.blocks_criticals() is False
+    assert rule.blocks_high() is False
+    assert rule.blocks_medium() is False
+    assert rule.alert_only() is True
 
     assert rule.action == "alert"

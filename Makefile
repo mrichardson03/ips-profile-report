@@ -41,7 +41,7 @@ clean-test:
 	rm -fr .pytest_cache
 
 lint:
-	flake8 panos_util tests
+	flake8
 
 format:
 	isort --recursive --atomic panos_util
