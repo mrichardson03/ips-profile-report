@@ -13,7 +13,7 @@ Required Python modules can be installed using the supplied `requirements.txt`
 file:
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ## Included Scripts
@@ -26,7 +26,7 @@ threats using a Panorama tech support file as input.
 #### Usage
 
 ```bash
-python block_progress_report.py <input_file> <output_file>
+python3 block_progress_report.py <input_file> <output_file>
 ```
 
 ##### Required Arguments
@@ -42,7 +42,7 @@ of a firewall or Panorama.
 #### Usage
 
 ```bash
-python threat_signature_report.py [-k | --api_key ] <hostname> <output_file>
+python3 threat_signature_report.py [-k | --api_key ] <hostname> <output_file>
 ```
 
 ##### Required Arguments
