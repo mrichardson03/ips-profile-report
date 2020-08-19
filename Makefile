@@ -58,7 +58,9 @@ test-all:
 	tox
 
 coverage:
-	pytest --cov=panos
+	coverage run -m pytest
+	coverage report
+	coverage html
 
 docs: clean-docs
 	$(MAKE) -C docs html
