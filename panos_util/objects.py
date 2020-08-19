@@ -53,6 +53,9 @@ class VulnerabilityProfile:
 
 
 class DefaultVulnerabilityProfile(VulnerabilityProfile):
+    def __init__(self):
+        pass
+
     @property
     def name(self):
         return "default"
@@ -71,6 +74,9 @@ class DefaultVulnerabilityProfile(VulnerabilityProfile):
 
 
 class StrictVulnerabilityProfile(VulnerabilityProfile):
+    def __init__(self):
+        pass
+
     @property
     def name(self):
         return "strict"

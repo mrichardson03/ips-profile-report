@@ -1,6 +1,10 @@
 import xmltodict
 
-from panos_util.objects import VulnerabilityProfile
+from panos_util.objects import (
+    DefaultVulnerabilityProfile,
+    StrictVulnerabilityProfile,
+    VulnerabilityProfile,
+)
 
 EMPTY = """
 <entry name="Empty"/>
@@ -88,6 +92,26 @@ ALERT_ONLY = """
     </threat-exception>
 </entry>
 """
+
+
+def test_default():
+    vp = DefaultVulnerabilityProfile()
+
+    assert vp.name == "default"
+    assert vp.blocks_criticals() is False
+    assert vp.blocks_high() is False
+    assert vp.blocks_medium() is False
+    assert vp.alert_only() is False
+
+
+def test_strict():
+    vp = StrictVulnerabilityProfile()
+
+    assert vp.name == "strict"
+    assert vp.blocks_criticals() is True
+    assert vp.blocks_high() is True
+    assert vp.blocks_medium() is True
+    assert vp.alert_only() is False
 
 
 def test_empty():
