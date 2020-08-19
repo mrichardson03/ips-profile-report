@@ -1,70 +1,48 @@
-class SecurityRule:
-    def __init__(
-        self, name, action, disabled, security_profile_group, vulnerability_profile
-    ):
-        self._name = name
-        self._action = action
-        self._disabled = disabled
-        self._security_profile_group = security_profile_group
-        self._vulnerability_profile = vulnerability_profile
+from collections import namedtuple
 
-    @property
-    def name(self):
-        return self._name
 
-    @property
-    def action(self):
-        return self._action
-
-    @property
-    def disabled(self):
-        return self._disabled
-
-    @property
-    def security_profile_group(self):
-        return self._security_profile_group
-
-    @security_profile_group.setter
-    def security_profile_group(self, value):
-        self._security_profile_group = value
-
-    @property
-    def vulnerability_profile(self):
-        return self._vulnerability_profile
-
-    @vulnerability_profile.setter
-    def vulnerability_profile(self, value):
-        self._vulnerability_profile = value
-
+class SecurityRule(
+    namedtuple(
+        "SecurityRule",
+        [
+            "name",
+            "action",
+            "disabled",
+            "security_profile_group",
+            "vulnerability_profile",
+        ],
+    )
+):
     @staticmethod
     def create_from_xmldict(xmldict):
-        name = xmldict["entry"]["@name"]
-        action = xmldict["entry"]["action"]
-        if "disabled" in xmldict["entry"] and xmldict["entry"]["disabled"] == "yes":
-            disabled = True
+        x = xmldict["entry"]
+
+        name = x.get("@name", None)
+        action = x.get("action", None)
+
+        disabled = x.get("disabled", None)
+        if disabled is not None:
+            if disabled == "yes":
+                disabled = True
+            else:
+                disabled = False
         else:
             disabled = False
 
         security_profile_group = None
         vulnerability_profile = None
 
-        if "profile-setting" in xmldict["entry"]:
-            if "group" in xmldict["entry"]["profile-setting"]:
-                if xmldict["entry"]["profile-setting"]["group"] is not None:
-                    security_profile_group = list(
-                        xmldict["entry"]["profile-setting"]["group"].values()
+        profile_setting = x.get("profile-setting", None)
+        if profile_setting is not None:
+            if "group" in profile_setting:
+                group = profile_setting.get("group", None)
+                security_profile_group = list(group.values())[0]
+            else:
+                profiles = profile_setting.get("profiles", None)
+                if "vulnerability" in profiles:
+                    vulnerability_profile = list(
+                        profiles.get("vulnerability").values()
                     )[0]
-            elif "profiles" in xmldict["entry"]["profile-setting"]:
-                if xmldict["entry"]["profile-setting"]["profiles"] is not None:
-                    if (
-                        "vulnerability"
-                        in xmldict["entry"]["profile-setting"]["profiles"]
-                    ):
-                        vulnerability_profile = list(
-                            xmldict["entry"]["profile-setting"]["profiles"][
-                                "vulnerability"
-                            ].values()
-                        )[0]
 
         return SecurityRule(
             name, action, disabled, security_profile_group, vulnerability_profile
