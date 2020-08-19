@@ -94,7 +94,7 @@ def test_internal_vp():
     xmldict = xmltodict.parse(INTERNAL_VP)
     vp = VulnerabilityProfile.create_from_xmldict(xmldict)
 
-    assert vp.name == 'Internal-VP'
+    assert vp.name == "Internal-VP"
     assert vp.blocks_criticals() is True
     assert vp.blocks_high() is True
     assert vp.blocks_medium() is False
@@ -104,7 +104,7 @@ def test_alert_only_vp():
     xmldict = xmltodict.parse(ALERT_ONLY_VP)
     vp = VulnerabilityProfile.create_from_xmldict(xmldict)
 
-    assert vp.name == 'Alert-Only-VP'
+    assert vp.name == "Alert-Only-VP"
     assert vp.blocks_criticals() is False
     assert vp.blocks_high() is False
     assert vp.blocks_medium() is False
@@ -114,7 +114,7 @@ def test_exception_vp():
     xmldict = xmltodict.parse(EXCEPTION_VP)
     vp = VulnerabilityProfile.create_from_xmldict(xmldict)
 
-    assert vp.name == 'Exception-VP'
+    assert vp.name == "Exception-VP"
     assert vp.blocks_criticals() is False
     assert vp.blocks_high() is False
     assert vp.blocks_medium() is False

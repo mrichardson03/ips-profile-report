@@ -73,5 +73,6 @@ jobs:
 
       - name: Install dependencies
         run: poetry install
-      # - name: Check formatting
-      #   run: poetry run make check-format
+
+      - name: Check formatting
+        run: poetry run make check-format

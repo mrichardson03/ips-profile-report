@@ -50,19 +50,19 @@ DEFAULT_MEDIUM_LOW_INFO = """
 
 def test_block_critical_high():
     xmldict = xmltodict.parse(BLOCK_CRITICAL_HIGH)
-    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict['entry'])
+    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
 
-    assert rule.name == 'Block-Critical-High'
+    assert rule.name == "Block-Critical-High"
     assert rule.blocks_criticals() is True
-    assert rule.blocks_high() == True
-    assert rule.blocks_medium() == False
+    assert rule.blocks_high() is True
+    assert rule.blocks_medium() is False
 
 
 def test_default_medium_low_info():
     xmldict = xmltodict.parse(DEFAULT_MEDIUM_LOW_INFO)
-    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict['entry'])
+    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
 
-    assert rule.name == 'Default-Medium-Low-Info'
-    assert rule.blocks_criticals() == False
-    assert rule.blocks_high() == False
-    assert rule.blocks_medium() == False
+    assert rule.name == "Default-Medium-Low-Info"
+    assert rule.blocks_criticals() is False
+    assert rule.blocks_high() is False
+    assert rule.blocks_medium() is False

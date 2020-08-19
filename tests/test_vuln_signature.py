@@ -74,6 +74,7 @@ MULTI_CVE = """
 </entry>
 """
 
+
 def test_standard_sig():
     xmldict = xmltodict.parse(STANDARD)
     sig = VulnerabilitySignature.create_from_xmldict(xmldict)
@@ -86,7 +87,9 @@ def test_no_affected_host():
     xmldict = xmltodict.parse(NO_AFFECTED_HOST)
     sig = VulnerabilitySignature.create_from_xmldict(xmldict)
 
-    assert sig.name == "Advantech WebAccess SCADA bwrunmie.exe Policy Bypass Vulnerability"
+    assert (
+        sig.name == "Advantech WebAccess SCADA bwrunmie.exe Policy Bypass Vulnerability"
+    )
     assert sig.threat_id == "57212"
     assert sig.affected_host is None
 
@@ -104,9 +107,16 @@ def test_multi_cve():
     xmldict = xmltodict.parse(MULTI_CVE)
     sig = VulnerabilitySignature.create_from_xmldict(xmldict)
 
-    assert sig.name == "Quest NetVault Backup Multipart Request Part Header Stack Buffer Overflow Vulnerability"
+    assert (
+        sig.name
+        == "Quest NetVault Backup Multipart Request Part Header Stack Buffer Overflow Vulnerability"
+    )
     assert sig.threat_id == "40834"
     assert sig.cve_id == [
-        "CVE-2017-17652", "CVE-2017-17412", "CVE-2018-1163",
-        "CVE-2018-1162", "CVE-2017-17419", "CVE-2017-17420"
+        "CVE-2017-17652",
+        "CVE-2017-17412",
+        "CVE-2018-1163",
+        "CVE-2018-1162",
+        "CVE-2017-17419",
+        "CVE-2017-17420",
     ]
