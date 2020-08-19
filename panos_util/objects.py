@@ -231,43 +231,43 @@ class VulnerabilitySignature(
 ):
     @staticmethod
     def create_from_xmldict(xmldict):
-        threat_id = xmldict["entry"]["@name"]
-        threat_name = xmldict["entry"]["threatname"]
+        x = xmldict["entry"]
 
-        vendor_id = None
-        if "vendor" in xmldict["entry"]:
-            if isinstance(xmldict["entry"]["vendor"]["member"], str):
-                vendor_id = [xmldict["entry"]["vendor"]["member"]]
+        threat_id = x.get("@name", None)
+        threat_name = x.get("threatname", None)
+
+        vendor_id = x.get("vendor", None)
+        if vendor_id is not None:
+            if isinstance(vendor_id.get("member", None), str):
+                vendor_id = [vendor_id.get("member")]
             else:
-                vendor_id = xmldict["entry"]["vendor"]["member"]
+                vendor_id = vendor_id.get("member")
 
-        cve_id = None
-        if "cve" in xmldict["entry"]:
-            if isinstance(xmldict["entry"]["cve"]["member"], str):
-                cve_id = [xmldict["entry"]["cve"]["member"]]
+        cve_id = x.get("cve", None)
+        if cve_id is not None:
+            if isinstance(cve_id.get("member", None), str):
+                cve_id = [cve_id.get("member")]
             else:
-                cve_id = xmldict["entry"]["cve"]["member"]
+                cve_id = cve_id.get("member")
+        else:
+            cve_id = []
 
-        category = xmldict["entry"]["category"]
-        severity = xmldict["entry"]["severity"]
+        category = x.get("category", None)
+        severity = x.get("severity", None)
 
         min_version = None
         max_version = None
 
-        if "engine-version" in xmldict["entry"]:
-            if "@min" in xmldict["entry"]["engine-version"]:
-                min_version = xmldict["entry"]["engine-version"]["@min"]
-            if "@max" in xmldict["entry"]["engine-version"]:
-                max_version = xmldict["entry"]["engine-version"]["@max"]
+        engine_version = x.get("engine-version", None)
+        if engine_version is not None:
+            min_version = engine_version.get("@min", None)
+            max_version = engine_version.get("@max", None)
 
-        default_action = None
-        if "default-action" in xmldict["entry"]:
-            default_action = xmldict["entry"]["default-action"]
+        default_action = x.get("default-action", None)
 
-        affected_host = None
-        if "affected-host" in xmldict["entry"]:
-            if xmldict["entry"]["affected-host"] is not None:
-                affected_host = list(xmldict["entry"]["affected-host"].keys())
+        affected_host = x.get("affected-host", None)
+        if affected_host is not None:
+            affected_host = list(affected_host.keys())
 
         return VulnerabilitySignature(
             threat_id,
