@@ -1,6 +1,7 @@
 class SecurityRule:
-
-    def __init__(self, name, action, disabled, security_profile_group, vulnerability_profile):
+    def __init__(
+        self, name, action, disabled, security_profile_group, vulnerability_profile
+    ):
         self._name = name
         self._action = action
         self._disabled = disabled
@@ -37,9 +38,9 @@ class SecurityRule:
 
     @staticmethod
     def create_from_xmldict(xmldict):
-        name = xmldict['entry']['@name']
-        action = xmldict['entry']['action']
-        if 'disabled' in xmldict['entry'] and xmldict['entry']['disabled'] == 'yes':
+        name = xmldict["entry"]["@name"]
+        action = xmldict["entry"]["action"]
+        if "disabled" in xmldict["entry"] and xmldict["entry"]["disabled"] == "yes":
             disabled = True
         else:
             disabled = False
@@ -47,15 +48,24 @@ class SecurityRule:
         security_profile_group = None
         vulnerability_profile = None
 
-        if 'profile-setting' in xmldict['entry']:
-            if 'group' in xmldict['entry']['profile-setting']:
-                if xmldict['entry']['profile-setting']['group'] is not None:
-                    security_profile_group = list(xmldict['entry']['profile-setting']['group'].values())[0]
-            elif 'profiles' in xmldict['entry']['profile-setting']:
-                if xmldict['entry']['profile-setting']['profiles'] is not None:
-                    if 'vulnerability' in xmldict['entry']['profile-setting']['profiles']:
+        if "profile-setting" in xmldict["entry"]:
+            if "group" in xmldict["entry"]["profile-setting"]:
+                if xmldict["entry"]["profile-setting"]["group"] is not None:
+                    security_profile_group = list(
+                        xmldict["entry"]["profile-setting"]["group"].values()
+                    )[0]
+            elif "profiles" in xmldict["entry"]["profile-setting"]:
+                if xmldict["entry"]["profile-setting"]["profiles"] is not None:
+                    if (
+                        "vulnerability"
+                        in xmldict["entry"]["profile-setting"]["profiles"]
+                    ):
                         vulnerability_profile = list(
-                            xmldict['entry']['profile-setting']['profiles']['vulnerability'].values()
+                            xmldict["entry"]["profile-setting"]["profiles"][
+                                "vulnerability"
+                            ].values()
                         )[0]
 
-        return SecurityRule(name, action, disabled, security_profile_group, vulnerability_profile)
+        return SecurityRule(
+            name, action, disabled, security_profile_group, vulnerability_profile
+        )
