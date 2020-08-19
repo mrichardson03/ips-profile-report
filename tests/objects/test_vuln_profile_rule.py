@@ -90,6 +90,29 @@ ALERT = """
 </entry>
 """
 
+BAD_ACTION = """
+<entry name="Bad-Action">
+    <action>
+        <foo/>
+    </action>
+    <vendor-id>
+        <member>any</member>
+    </vendor-id>
+    <severity>
+        <member>critical</member>
+        <member>high</member>
+        <member>medium</member>
+    </severity>
+    <cve>
+        <member>any</member>
+    </cve>
+    <threat-name>any</threat-name>
+    <host>any</host>
+    <category>any</category>
+    <packet-capture>single-packet</packet-capture>
+</entry>
+"""
+
 
 def test_empty():
     xmldict = xmltodict.parse(EMPTY)
@@ -184,3 +207,14 @@ def test_alert():
     assert rule.threat_name == "any"
     assert rule.host == "any"
     assert rule.packet_capture == "disable"
+
+
+def test_bad_action():
+    xmldict = xmltodict.parse(BAD_ACTION)
+    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
+
+    assert rule.name == "Bad-Action"
+    assert rule.blocks_criticals() is False
+    assert rule.blocks_high() is False
+    assert rule.blocks_medium() is False
+    assert rule.alert_only() is False
