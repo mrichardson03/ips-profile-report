@@ -48,7 +48,7 @@ format:
 	black .
 
 check-format:
-	isort --atomic --check-only panos_util
+	isort --atomic --check-only .
 	black --check .
 
 test:
