@@ -1,8 +1,7 @@
 from collections import Counter
 from xml.etree import ElementTree
 
-import xmltodict
-
+from . import e_to_xmldict
 from .objects import (
     DefaultVulnerabilityProfile,
     SecurityProfileGroup,
@@ -71,23 +70,17 @@ class DeviceGroup:
 
         vuln_profiles = {}
         for vuln_profile in dg.findall("./profiles/vulnerability/entry"):
-            raw_xml = ElementTree.tostring(vuln_profile)
-            xmldict = xmltodict.parse(raw_xml)
-            vp = VulnerabilityProfile.create_from_xmldict(xmldict)
+            vp = VulnerabilityProfile.create_from_xmldict(e_to_xmldict(vuln_profile))
             vuln_profiles.update({vp.name: vp})
 
         profile_groups = {}
         for profile_group in dg.findall("./profile-group/entry"):
-            raw_xml = ElementTree.tostring(profile_group)
-            xmldict = xmltodict.parse(raw_xml)
-            pg = SecurityProfileGroup.create_from_xmldict(xmldict)
+            pg = SecurityProfileGroup.create_from_xmldict(e_to_xmldict(profile_group))
             profile_groups.update({pg.name: pg})
 
         rules = []
         for rule in dg.findall("./pre-rulebase/security/rules/entry"):
-            raw_xml = ElementTree.tostring(rule)
-            xmldict = xmltodict.parse(raw_xml)
-            sr = SecurityRule.create_from_xmldict(xmldict)
+            sr = SecurityRule.create_from_xmldict(e_to_xmldict(rule))
             rules.append(sr)
 
         return DeviceGroup(name, rules, vuln_profiles, profile_groups)
