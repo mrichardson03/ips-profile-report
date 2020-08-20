@@ -19,8 +19,6 @@ from panos_util.objects import (
 )
 from panos_util.policies import SecurityRule
 
-__metaclass__ = type
-
 
 def resolve_vuln_profile(
     rule, device_group_name, profile_group_dict, vuln_profile_dict

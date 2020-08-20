@@ -13,8 +13,6 @@ import xmltodict
 
 from panos_util.objects import VulnerabilitySignature
 
-__metaclass__ = type
-
 
 def parse_xml(xml_doc):
     tree = xml.etree.ElementTree.fromstring(xml_doc)
