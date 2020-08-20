@@ -3,6 +3,10 @@ name = "panos-ips-reports"
 version = "1.0.0"
 description = "Additional IPS reports for Palo Alto Networks firewalls"
 authors = ["Michael Richardson <mrichardson03@gmail.com>"]
+packages = [
+    { include = "panos_util" },
+    { include = "*.py" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
