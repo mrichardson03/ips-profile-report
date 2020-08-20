@@ -51,22 +51,6 @@ MULTI_CHILD = """
 </entry>
 """
 
-STANDARD = """
-<entry name="31673" p="yes">
-    <threatname>SCADA ICCP Unauthorized MMS Write Request Attempt</threatname>
-    <vendor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <member>1111404</member>
-    </vendor>
-    <category>info-leak</category>
-    <severity>low</severity>
-    <engine-version min="5.0"/>
-    <affected-host>
-        <server>yes</server>
-    </affected-host>
-    <default-action>alert</default-action>
-</entry>
-"""
-
 
 def test_empty():
     xmldict = xmltodict.parse(EMPTY)
@@ -114,17 +98,3 @@ def test_multi_child():
     assert sig.vendor_id == ["one", "two"]
     assert sig.cve_id == ["one", "two"]
     assert sig.affected_host == ["server", "client"]
-
-
-def test_standard_sig():
-    xmldict = xmltodict.parse(STANDARD)
-    sig = VulnerabilitySignature.create_from_xmldict(xmldict)
-
-    assert sig.name == "SCADA ICCP Unauthorized MMS Write Request Attempt"
-    assert sig.threat_id == "31673"
-    assert sig.category == "info-leak"
-    assert sig.severity == "low"
-    assert sig.min_version == "5.0"
-    assert sig.max_version is None
-    assert sig.affected_host == ["server"]
-    assert sig.default_action == "alert"
