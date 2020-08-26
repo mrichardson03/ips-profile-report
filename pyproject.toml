@@ -1,8 +1,11 @@
 [tool.poetry]
 name = "panos-ips-reports"
-version = "1.0.0"
+version = "0.1.0"
 description = "Additional IPS reports for Palo Alto Networks firewalls"
 authors = ["Michael Richardson <mrichardson03@gmail.com>"]
+packages = [
+    { include = "panos_util" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -15,6 +18,10 @@ pytest = "^6.0.1"
 black = "^19.10b0"
 isort = "^5.4.2"
 coverage = "^5.2.1"
+
+[tool.poetry.scripts]
+block_progress_report = "panos_util.block_report:main"
+threat_signature_report = "panos_util.threat_report:main"
 
 [build-system]
 requires = ["poetry>=0.12"]
