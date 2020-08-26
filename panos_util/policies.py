@@ -1,4 +1,9 @@
+from __future__ import annotations
+
 from collections import namedtuple
+from xml.etree.ElementTree import Element
+
+from .objects import strip_empty
 
 
 class SecurityRule(
@@ -14,35 +19,23 @@ class SecurityRule(
     )
 ):
     @staticmethod
-    def create_from_xmldict(xmldict):
-        x = xmldict["entry"]
+    def create_from_element(e: Element) -> SecurityRule:
+        """ Create SecurityRule from XML element. """
+        name = e.get("name")
+        action = strip_empty(e.findtext("action"))
 
-        name = x.get("@name", None)
-        action = x.get("action", None)
-
-        disabled = x.get("disabled", None)
-        if disabled is not None:
-            if disabled == "yes":
-                disabled = True
-            else:
-                disabled = False
+        disabled = strip_empty(e.findtext("disabled"))
+        if disabled == "yes":
+            disabled = True
         else:
             disabled = False
 
-        security_profile_group = None
-        vulnerability_profile = None
-
-        profile_setting = x.get("profile-setting", None)
-        if profile_setting is not None:
-            if "group" in profile_setting:
-                group = profile_setting.get("group", None)
-                security_profile_group = list(group.values())[0]
-            else:
-                profiles = profile_setting.get("profiles", None)
-                if "vulnerability" in profiles:
-                    vulnerability_profile = list(
-                        profiles.get("vulnerability").values()
-                    )[0]
+        security_profile_group = strip_empty(
+            e.findtext(".//profile-setting/group/member")
+        )
+        vulnerability_profile = strip_empty(
+            e.findtext(".//profile-setting/profiles/vulnerability/member")
+        )
 
         return SecurityRule(
             name, action, disabled, security_profile_group, vulnerability_profile

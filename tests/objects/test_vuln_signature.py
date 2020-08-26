@@ -1,13 +1,13 @@
-import xmltodict
+import xml.etree.ElementTree as ElementTree
 
 from panos_util.objects import VulnerabilitySignature
 
 EMPTY = """
-<entry name="1"/>
+<entry name="Empty"/>
 """
 
 EMPTY_CHILD = """
-<entry name="2">
+<entry name="Empty-Child">
     <threatname/>
     <vendor/>
     <cve/>
@@ -53,38 +53,38 @@ MULTI_CHILD = """
 
 
 def test_empty():
-    xmldict = xmltodict.parse(EMPTY)
-    sig = VulnerabilitySignature.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(EMPTY)
+    sig = VulnerabilitySignature.create_from_element(e)
 
     assert sig.name is None
-    assert sig.vendor_id is None
+    assert sig.vendor_id == []
     assert sig.cve_id == []
     assert sig.category is None
     assert sig.severity is None
     assert sig.min_version is None
     assert sig.max_version is None
-    assert sig.affected_host is None
+    assert sig.affected_host == []
     assert sig.default_action is None
 
 
 def test_empty_child():
-    xmldict = xmltodict.parse(EMPTY_CHILD)
-    sig = VulnerabilitySignature.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(EMPTY_CHILD)
+    sig = VulnerabilitySignature.create_from_element(e)
 
     assert sig.name is None
-    assert sig.vendor_id is None
+    assert sig.vendor_id == []
     assert sig.cve_id == []
     assert sig.category is None
     assert sig.severity is None
     assert sig.min_version is None
     assert sig.max_version is None
-    assert sig.affected_host is None
+    assert sig.affected_host == []
     assert sig.default_action is None
 
 
 def test_single_child():
-    xmldict = xmltodict.parse(SINGLE_CHILD)
-    sig = VulnerabilitySignature.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(SINGLE_CHILD)
+    sig = VulnerabilitySignature.create_from_element(e)
 
     assert sig.vendor_id == ["one"]
     assert sig.cve_id == ["one"]
@@ -92,8 +92,8 @@ def test_single_child():
 
 
 def test_multi_child():
-    xmldict = xmltodict.parse(MULTI_CHILD)
-    sig = VulnerabilitySignature.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(MULTI_CHILD)
+    sig = VulnerabilitySignature.create_from_element(e)
 
     assert sig.vendor_id == ["one", "two"]
     assert sig.cve_id == ["one", "two"]

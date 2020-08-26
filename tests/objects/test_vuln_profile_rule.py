@@ -1,4 +1,4 @@
-import xmltodict
+import xml.etree.ElementTree as ElementTree
 
 from panos_util.objects import VulnerabilityProfileRule
 
@@ -115,8 +115,8 @@ BAD_ACTION = """
 
 
 def test_empty():
-    xmldict = xmltodict.parse(EMPTY)
-    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
+    e = ElementTree.fromstring(EMPTY)
+    rule = VulnerabilityProfileRule.create_from_element(e)
 
     assert rule.name == "Empty"
 
@@ -127,23 +127,23 @@ def test_empty():
 
 
 def test_empty_child():
-    xmldict = xmltodict.parse(EMPTY_CHILD)
-    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
+    e = ElementTree.fromstring(EMPTY_CHILD)
+    rule = VulnerabilityProfileRule.create_from_element(e)
 
     assert rule.name == "Empty-Child"
 
     assert rule.action is None
-    assert rule.vendor_id is None
-    assert rule.severity is None
-    assert rule.cve is None
+    assert rule.vendor_id == []
+    assert rule.severity == []
+    assert rule.cve == []
     assert rule.threat_name is None
     assert rule.host is None
     assert rule.packet_capture is None
 
 
 def test_single_child():
-    xmldict = xmltodict.parse(SINGLE_CHILD)
-    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
+    e = ElementTree.fromstring(SINGLE_CHILD)
+    rule = VulnerabilityProfileRule.create_from_element(e)
 
     assert rule.name == "Single-Child"
 
@@ -157,8 +157,8 @@ def test_single_child():
 
 
 def test_multi_child():
-    xmldict = xmltodict.parse(MULTI_CHILD)
-    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
+    e = ElementTree.fromstring(MULTI_CHILD)
+    rule = VulnerabilityProfileRule.create_from_element(e)
 
     assert rule.name == "Multi-Child"
 
@@ -172,8 +172,8 @@ def test_multi_child():
 
 
 def test_blocks():
-    xmldict = xmltodict.parse(BLOCKS)
-    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
+    e = ElementTree.fromstring(BLOCKS)
+    rule = VulnerabilityProfileRule.create_from_element(e)
 
     assert rule.name == "Blocks"
     assert rule.blocks_criticals() is True
@@ -191,8 +191,8 @@ def test_blocks():
 
 
 def test_alert():
-    xmldict = xmltodict.parse(ALERT)
-    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
+    e = ElementTree.fromstring(ALERT)
+    rule = VulnerabilityProfileRule.create_from_element(e)
 
     assert rule.name == "Alert"
     assert rule.blocks_criticals() is False
@@ -210,8 +210,8 @@ def test_alert():
 
 
 def test_bad_action():
-    xmldict = xmltodict.parse(BAD_ACTION)
-    rule = VulnerabilityProfileRule.create_from_xmldict(xmldict["entry"])
+    e = ElementTree.fromstring(BAD_ACTION)
+    rule = VulnerabilityProfileRule.create_from_element(e)
 
     assert rule.name == "Bad-Action"
     assert rule.blocks_criticals() is False

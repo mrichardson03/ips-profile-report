@@ -1,4 +1,15 @@
+from __future__ import annotations
+
 from collections import namedtuple
+from xml.etree.ElementTree import Element
+
+
+def strip_empty(s: str) -> str:
+    """ If s is the empty string, return None. """
+    if s == "":
+        return None
+    else:
+        return s
 
 
 class VulnerabilityProfile:
@@ -34,20 +45,14 @@ class VulnerabilityProfile:
             return False
 
     @staticmethod
-    def create_from_xmldict(xmldict):
-        name = xmldict["entry"]["@name"]
-        rules = list()
+    def create_from_element(e: Element) -> VulnerabilityProfile:
+        """ Create VulnerabilityProfile from XML element. """
+        name = e.get("name")
 
-        if "rules" in xmldict["entry"]:
-
-            if isinstance(xmldict["entry"]["rules"]["entry"], list):
-                for rule in xmldict["entry"]["rules"]["entry"]:
-                    new_rule = VulnerabilityProfileRule.create_from_xmldict(rule)
-                    rules.append(new_rule)
-            else:
-                rule = xmldict["entry"]["rules"]["entry"]
-                new_rule = VulnerabilityProfileRule.create_from_xmldict(rule)
-                rules.append(new_rule)
+        rules = []
+        for rule in e.findall(".//rules/entry"):
+            r = VulnerabilityProfileRule.create_from_element(rule)
+            rules.append(r)
 
         return VulnerabilityProfile(name, rules)
 
@@ -94,29 +99,22 @@ class StrictVulnerabilityProfile(VulnerabilityProfile):
         return False
 
 
-class VulnerabilityProfileRule:
-    def __init__(
-        self,
-        name,
-        vendor_id,
-        cve,
-        severity,
-        action,
-        threat_name,
-        host,
-        category,
-        packet_capture,
-    ):
-        self.name = name
-        self.vendor_id = vendor_id
-        self.cve = cve
-        self.severity = severity
-        self.action = action
-        self.threat_name = threat_name
-        self.host = host
-        self.category = category
-        self.packet_capture = packet_capture
-
+class VulnerabilityProfileRule(
+    namedtuple(
+        "VulnerabilityProfileRule",
+        [
+            "name",
+            "vendor_id",
+            "cve",
+            "severity",
+            "action",
+            "threat_name",
+            "host",
+            "category",
+            "packet_capture",
+        ],
+    )
+):
     def blocks_criticals(self):
         if self.severity is not None and "critical" in self.severity:
             if self.action is not None and self.action in [
@@ -163,47 +161,36 @@ class VulnerabilityProfileRule:
             return False
 
     @staticmethod
-    def create_from_xmldict(xmldict):
-        name = xmldict["@name"]
+    def create_from_element(e: Element) -> VulnerabilityProfileRule:
+        """ Create VulnerabilityProfileRule from XML element. """
+        name = e.get("name")
 
-        vendor_id = None
-        if "vendor-id" in xmldict and xmldict["vendor-id"] is not None:
-            if isinstance(xmldict["vendor-id"]["member"], list):
-                vendor_id = xmldict["vendor-id"]["member"]
-            else:
-                vendor_id = list(xmldict["vendor-id"].values())
+        vendor_ids = []
+        for vendor_id in e.findall(".//vendor-id/member"):
+            vendor_ids.append(vendor_id.text)
 
-        cve = None
-        if "cve" in xmldict and xmldict["cve"] is not None:
-            if isinstance(xmldict["cve"]["member"], list):
-                cve = xmldict["cve"]["member"]
-            else:
-                cve = list(xmldict["cve"].values())
+        severities = []
+        for severity in e.findall(".//severity/member"):
+            severities.append(severity.text)
 
-        severity = None
-        if "severity" in xmldict and xmldict["severity"] is not None:
-            if isinstance(xmldict["severity"]["member"], list):
-                severity = xmldict["severity"]["member"]
-            else:
-                severity = list(xmldict["severity"].values())
+        cve_ids = []
+        for cve in e.findall(".//cve/member"):
+            cve_ids.append(cve.text)
 
         action = None
-        if "action" in xmldict:
-            if isinstance(xmldict["action"], dict):
-                action = list(xmldict["action"].keys())[0]
-            else:
-                action = None
+        if e.find(".//action/") is not None:
+            action = e.find(".//action/").tag
 
-        threat_name = xmldict.get("threat-name", None)
-        host = xmldict.get("host")
-        category = xmldict.get("category")
-        packet_capture = xmldict.get("packet-capture")
+        threat_name = strip_empty(e.findtext(".//threat-name"))
+        host = strip_empty(e.findtext(".//host"))
+        category = strip_empty(e.findtext(".//category"))
+        packet_capture = strip_empty(e.findtext(".//packet-capture"))
 
         return VulnerabilityProfileRule(
             name,
-            vendor_id,
-            cve,
-            severity,
+            vendor_ids,
+            cve_ids,
+            severities,
             action,
             threat_name,
             host,
@@ -229,6 +216,48 @@ class VulnerabilitySignature(
         ],
     )
 ):
+    @staticmethod
+    def create_from_element(e: Element) -> VulnerabilitySignature:
+        threat_id = e.get("name")
+        threat_name = strip_empty(e.findtext("threatname"))
+
+        vendor_id = []
+        for vendor in e.findall(".//vendor/member"):
+            vendor_id.append(vendor.text)
+
+        cve_id = []
+        for cve in e.findall(".//cve/member"):
+            cve_id.append(cve.text)
+
+        category = strip_empty(e.findtext("category"))
+        severity = strip_empty(e.findtext("severity"))
+
+        min_version = None
+        max_version = None
+        engine_version = e.find(".//engine-version")
+        if engine_version is not None:
+            min_version = engine_version.get("min")
+            max_version = engine_version.get("max")
+
+        default_action = strip_empty(e.findtext("default-action"))
+
+        affected_hosts = []
+        for affected_host in e.findall("./affected-host/"):
+            affected_hosts.append(affected_host.tag)
+
+        return VulnerabilitySignature(
+            threat_id,
+            threat_name,
+            vendor_id,
+            cve_id,
+            category,
+            severity,
+            min_version,
+            max_version,
+            affected_hosts,
+            default_action,
+        )
+
     @staticmethod
     def create_from_xmldict(xmldict):
         x = xmldict["entry"]
@@ -296,6 +325,20 @@ class SecurityProfileGroup(
         ],
     )
 ):
+    @staticmethod
+    def create_from_element(e: Element) -> SecurityProfileGroup:
+        name = e.get("name")
+
+        virus = strip_empty(e.findtext(".//virus/member"))
+        spyware = strip_empty(e.findtext(".//spyware/member"))
+        vulnerability = strip_empty(e.findtext(".//vulnerability/member"))
+        url_filtering = strip_empty(e.findtext(".//url-filtering/member"))
+        wildfire_analysis = strip_empty(e.findtext(".//wildfire-analysis/member"))
+
+        return SecurityProfileGroup(
+            name, virus, spyware, vulnerability, url_filtering, wildfire_analysis
+        )
+
     @staticmethod
     def create_from_xmldict(xmldict):
         x = xmldict["entry"]

@@ -1,4 +1,4 @@
-import xmltodict
+import xml.etree.ElementTree as ElementTree
 
 from panos_util.objects import SecurityProfileGroup
 
@@ -38,15 +38,15 @@ SINGLE_CHILD = """
 
 
 def test_empty():
-    xmldict = xmltodict.parse(EMPTY)
-    spg = SecurityProfileGroup.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(EMPTY)
+    spg = SecurityProfileGroup.create_from_element(e)
 
     assert spg.name == "Empty"
 
 
 def test_empty_child():
-    xmldict = xmltodict.parse(EMPTY_CHILD)
-    spg = SecurityProfileGroup.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(EMPTY_CHILD)
+    spg = SecurityProfileGroup.create_from_element(e)
 
     assert spg.name == "Empty-Child"
     assert spg.virus is None
@@ -57,8 +57,8 @@ def test_empty_child():
 
 
 def test_single_child():
-    xmldict = xmltodict.parse(SINGLE_CHILD)
-    spg = SecurityProfileGroup.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(SINGLE_CHILD)
+    spg = SecurityProfileGroup.create_from_element(e)
 
     assert spg.name == "Single-Child"
     assert spg.virus == "one"

@@ -1,4 +1,4 @@
-import xmltodict
+import xml.etree.ElementTree as ElementTree
 
 from panos_util.objects import (
     DefaultVulnerabilityProfile,
@@ -115,8 +115,8 @@ def test_strict():
 
 
 def test_empty():
-    xmldict = xmltodict.parse(EMPTY)
-    vp = VulnerabilityProfile.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(EMPTY)
+    vp = VulnerabilityProfile.create_from_element(e)
 
     assert vp.name == "Empty"
     assert vp.blocks_criticals() is False
@@ -126,8 +126,8 @@ def test_empty():
 
 
 def test_block_all():
-    xmldict = xmltodict.parse(BLOCK_ALL)
-    vp = VulnerabilityProfile.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(BLOCK_ALL)
+    vp = VulnerabilityProfile.create_from_element(e)
 
     assert vp.name == "Block-All"
     assert vp.blocks_criticals() is True
@@ -137,8 +137,8 @@ def test_block_all():
 
 
 def test_alert_only_vp():
-    xmldict = xmltodict.parse(ALERT_ONLY)
-    vp = VulnerabilityProfile.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(ALERT_ONLY)
+    vp = VulnerabilityProfile.create_from_element(e)
 
     assert vp.name == "Alert-Only"
     assert vp.blocks_criticals() is False

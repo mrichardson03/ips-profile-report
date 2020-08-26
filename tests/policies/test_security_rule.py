@@ -1,4 +1,4 @@
-import xmltodict
+import xml.etree.ElementTree as ElementTree
 
 from panos_util.policies import SecurityRule
 
@@ -68,15 +68,15 @@ NO_VULN_PROFILE = """
 
 
 def test_empty():
-    xmldict = xmltodict.parse(EMPTY)
-    r = SecurityRule.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(EMPTY)
+    r = SecurityRule.create_from_element(e)
 
     assert r.name == "Empty"
 
 
 def test_empty_child():
-    xmldict = xmltodict.parse(EMPTY_CHILD)
-    r = SecurityRule.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(EMPTY_CHILD)
+    r = SecurityRule.create_from_element(e)
 
     assert r.name == "Empty-Child"
     assert r.action is None
@@ -86,24 +86,24 @@ def test_empty_child():
 
 
 def test_disabled():
-    xmldict = xmltodict.parse(DISABLED)
-    r = SecurityRule.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(DISABLED)
+    r = SecurityRule.create_from_element(e)
 
     assert r.name == "Disabled"
     assert r.disabled is True
 
 
 def test_disabled_no():
-    xmldict = xmltodict.parse(DISABLED_NO)
-    r = SecurityRule.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(DISABLED_NO)
+    r = SecurityRule.create_from_element(e)
 
     assert r.name == "Disabled-No"
     assert r.disabled is False
 
 
 def test_profile_group():
-    xmldict = xmltodict.parse(PROFILE_GROUP)
-    r = SecurityRule.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(PROFILE_GROUP)
+    r = SecurityRule.create_from_element(e)
 
     assert r.name == "Profile-Group"
     assert r.security_profile_group == "Profile-Group"
@@ -111,8 +111,8 @@ def test_profile_group():
 
 
 def test_empty_profile_setting():
-    xmldict = xmltodict.parse(EMPTY_PROFILE_SETTING)
-    r = SecurityRule.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(EMPTY_PROFILE_SETTING)
+    r = SecurityRule.create_from_element(e)
 
     assert r.name == "Empty-Profile-Setting"
     assert r.security_profile_group is None
@@ -120,8 +120,8 @@ def test_empty_profile_setting():
 
 
 def test_vuln_profile():
-    xmldict = xmltodict.parse(VULN_PROFILE)
-    r = SecurityRule.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(VULN_PROFILE)
+    r = SecurityRule.create_from_element(e)
 
     assert r.name == "Vuln-Profile"
     assert r.security_profile_group is None
@@ -129,8 +129,8 @@ def test_vuln_profile():
 
 
 def test_no_vuln_profile():
-    xmldict = xmltodict.parse(NO_VULN_PROFILE)
-    r = SecurityRule.create_from_xmldict(xmldict)
+    e = ElementTree.fromstring(NO_VULN_PROFILE)
+    r = SecurityRule.create_from_element(e)
 
     assert r.name == "No-Vuln-Profile"
     assert r.vulnerability_profile is None

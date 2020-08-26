@@ -1,3 +1,5 @@
+import xml.etree.ElementTree as ElementTree
+
 from panos_util.panorama import DeviceGroup
 
 DEVICE_GROUP = """
@@ -91,7 +93,8 @@ DEVICE_GROUP = """
 
 
 def test_device_group():
-    dg = DeviceGroup.create_from_xml(DEVICE_GROUP)
+    e = ElementTree.fromstring(DEVICE_GROUP)
+    dg = DeviceGroup.create_from_element(e)
     rule_counts = dg.rule_counts
 
     assert rule_counts["total"] == 6

@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from collections import Counter
 from xml.etree import ElementTree
+from xml.etree.ElementTree import Element
 
 from . import e_to_xmldict
 from .objects import (
@@ -60,6 +63,27 @@ class DeviceGroup:
     def _lookup_profile_group(self, name):
         pg = self.profile_groups.get(name)
         return self._lookup_profile(pg.vulnerability)
+
+    @staticmethod
+    def create_from_element(e: Element) -> DeviceGroup:
+        name = e.get("name")
+
+        vuln_profiles = {}
+        for vuln_profile in e.findall("./profiles/vulnerability/entry"):
+            vp = VulnerabilityProfile.create_from_element(vuln_profile)
+            vuln_profiles.update({vp.name: vp})
+
+        profile_groups = {}
+        for profile_group in e.findall("./profile-group/entry"):
+            pg = SecurityProfileGroup.create_from_element(profile_group)
+            profile_groups.update({pg.name: pg})
+
+        rules = []
+        for rule in e.findall("./pre-rulebase/security/rules/entry"):
+            sr = SecurityRule.create_from_element(rule)
+            rules.append(sr)
+
+        return DeviceGroup(name, rules, vuln_profiles, profile_groups)
 
     @staticmethod
     def create_from_xml(xml):
