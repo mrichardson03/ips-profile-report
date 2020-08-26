@@ -20,21 +20,6 @@ class Panorama:
         """ Gets a DeviceGroup object by name. """
         return self.device_groups.get(name, None)
 
-    def resolve_profile(self, name: str) -> VulnerabilityProfile:
-        """ Looks up a VulnerabilityProfile in shared by name. """
-        device_group = self.device_groups.get("shared")
-        return device_group.vuln_profiles.get(name, None)
-
-    def resolve_profile_group(self, name: str) -> VulnerabilityProfile:
-        """ Looks up a VulnerabilityProfile in shared by SecurityProfileGroup name. """
-        device_group = self.device_groups.get("shared")
-        group = device_group.profile_groups.get(name, None)
-
-        if group is not None:
-            return self.resolve_profile(group.vulnerability)
-        else:
-            return None
-
     @staticmethod
     def create_from_element(e: Element) -> Panorama:
         """ Create Panorama object from XML element. """
@@ -42,6 +27,7 @@ class Panorama:
 
         shared_e = e.find("./shared")
         shared_obj = DeviceGroup.create_from_element(shared_e)
+        shared_obj.name = "shared"  # Helps with debugging.
         device_groups.update({"shared": shared_obj})
 
         for dg_e in e.findall("./devices/entry/device-group/"):
@@ -75,7 +61,7 @@ class DeviceGroup:
             self._rule_counts = Counter()
             self._update_rule_counts()
         else:
-            if force_update is True:
+            if force_update is True:  # pragma: no cover
                 self._update_rule_counts()
 
         return self._rule_counts
@@ -113,10 +99,9 @@ class DeviceGroup:
         profile = self.vuln_profiles.get(name, None)
 
         if profile is None:
-            if self.parent is not None:
-                return self.parent.resolve_profile(name)
-        else:
-            return profile
+            return self.parent.resolve_profile(name)
+
+        return profile
 
     def resolve_profile_group(self, name: str) -> VulnerabilityProfile:
         """ Looks up a VulnerabilityProfile by SecurityProfileGroup name. """
@@ -125,10 +110,7 @@ class DeviceGroup:
         if group is not None:
             return self.resolve_profile(group.vulnerability)
         else:
-            if self.parent is not None:
-                return self.parent.resolve_profile_group(name)
-
-        return None
+            return self.parent.resolve_profile_group(name)
 
     @staticmethod
     def create_from_element(e: Element) -> DeviceGroup:
