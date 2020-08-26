@@ -109,7 +109,7 @@ def test_device_group():
     assert rule_counts["disabled"] == 1
 
 
-def test_panorama():
+def test_panorama_from_config():
     with open(os.path.join(os.path.dirname(__file__), "panorama.xml"), "r") as f:
         xml_doc = f.read()
 
