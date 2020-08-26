@@ -1,4 +1,4 @@
-from __future__ import annotations
+from __future__ import absolute_import, annotations, division, print_function
 
 from collections import Counter
 from xml.etree.ElementTree import Element

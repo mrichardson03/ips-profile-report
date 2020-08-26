@@ -1,3 +1,5 @@
+from __future__ import absolute_import, division, print_function
+
 import xml.etree.ElementTree as ElementTree
 
 from panos_util.objects import VulnerabilitySignature
