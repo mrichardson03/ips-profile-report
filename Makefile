@@ -41,7 +41,7 @@ clean-test:
 	rm -fr .pytest_cache
 
 lint:
-	flake8
+	flake8 *.py panos_util/ tests/
 
 format:
 	isort --atomic panos_util
