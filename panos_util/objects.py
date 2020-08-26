@@ -3,13 +3,7 @@ from __future__ import annotations
 from collections import namedtuple
 from xml.etree.ElementTree import Element
 
-
-def strip_empty(s: str) -> str:
-    """ If s is the empty string, return None. """
-    if s == "":
-        return None
-    else:
-        return s
+from . import strip_empty
 
 
 class VulnerabilityProfile:

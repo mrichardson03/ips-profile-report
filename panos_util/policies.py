@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import namedtuple
 from xml.etree.ElementTree import Element
 
-from .objects import strip_empty
+from . import strip_empty
 
 
 class SecurityRule(
