@@ -7,4 +7,5 @@
     "python.linting.enabled": true,
     "editor.formatOnSave": true,
     "python.formatting.provider": "black",
+    "python.testing.pytestEnabled": true
 }
