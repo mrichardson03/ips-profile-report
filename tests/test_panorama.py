@@ -1,6 +1,7 @@
+import os
 import xml.etree.ElementTree as ElementTree
 
-from panos_util.panorama import DeviceGroup
+from panos_util.panorama import DeviceGroup, Panorama
 
 DEVICE_GROUP = """
 <entry name="Device-Group">
@@ -94,8 +95,9 @@ DEVICE_GROUP = """
 
 def test_device_group():
     e = ElementTree.fromstring(DEVICE_GROUP)
+
     dg = DeviceGroup.create_from_element(e)
-    rule_counts = dg.rule_counts
+    rule_counts = dg.rule_counts()
 
     assert rule_counts["total"] == 6
     assert rule_counts["alert_only"] == 1
@@ -103,3 +105,22 @@ def test_device_group():
     assert rule_counts["blocks_high"] == 2
     assert rule_counts["blocks_medium"] == 2
     assert rule_counts["disabled"] == 1
+
+
+def test_panorama():
+    with open(os.path.join(os.path.dirname(__file__), "panorama.xml"), "r") as f:
+        xml_doc = f.read()
+
+    e = ElementTree.fromstring(xml_doc)
+    p = Panorama.create_from_element(e)
+
+    dg = p.get_device_group("DG-1")
+    rule_counts = dg.rule_counts()
+
+    assert rule_counts["total"] == 8
+    assert rule_counts["alert_only"] == 1
+    assert rule_counts["blocks_criticals"] == 5
+    assert rule_counts["blocks_high"] == 3
+    assert rule_counts["blocks_medium"] == 2
+    assert rule_counts["disabled"] == 1
+    assert rule_counts["drop"] == 1
