@@ -4,7 +4,7 @@ ignore = E203,E501,W503
 # E203,E501,W503: per recommendation from black
 # D203: Not compatible with pep257
 max-line-length = 88
-# max-complexity = 20
+max-complexity = 20
 no-isort-config = true
 use-varnames-strict-mode = true
 exclude =
