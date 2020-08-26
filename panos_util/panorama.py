@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 from collections import Counter
-from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
-from . import e_to_xmldict
 from .objects import (
     DefaultVulnerabilityProfile,
     SecurityProfileGroup,
@@ -81,30 +79,6 @@ class DeviceGroup:
         rules = []
         for rule in e.findall("./pre-rulebase/security/rules/entry"):
             sr = SecurityRule.create_from_element(rule)
-            rules.append(sr)
-
-        return DeviceGroup(name, rules, vuln_profiles, profile_groups)
-
-    @staticmethod
-    def create_from_xml(xml):
-        tree = ElementTree.fromstring(xml)
-
-        dg = tree.find(".")
-        name = dg.attrib["name"]
-
-        vuln_profiles = {}
-        for vuln_profile in dg.findall("./profiles/vulnerability/entry"):
-            vp = VulnerabilityProfile.create_from_xmldict(e_to_xmldict(vuln_profile))
-            vuln_profiles.update({vp.name: vp})
-
-        profile_groups = {}
-        for profile_group in dg.findall("./profile-group/entry"):
-            pg = SecurityProfileGroup.create_from_xmldict(e_to_xmldict(profile_group))
-            profile_groups.update({pg.name: pg})
-
-        rules = []
-        for rule in dg.findall("./pre-rulebase/security/rules/entry"):
-            sr = SecurityRule.create_from_xmldict(e_to_xmldict(rule))
             rules.append(sr)
 
         return DeviceGroup(name, rules, vuln_profiles, profile_groups)
