@@ -259,59 +259,6 @@ class VulnerabilitySignature(
             default_action,
         )
 
-    @staticmethod
-    def create_from_xmldict(xmldict):
-        x = xmldict["entry"]
-
-        threat_id = x.get("@name", None)
-        threat_name = x.get("threatname", None)
-
-        vendor_id = x.get("vendor", None)
-        if vendor_id is not None:
-            if isinstance(vendor_id.get("member", None), str):
-                vendor_id = [vendor_id.get("member")]
-            else:
-                vendor_id = vendor_id.get("member")
-
-        cve_id = x.get("cve", None)
-        if cve_id is not None:
-            if isinstance(cve_id.get("member", None), str):
-                cve_id = [cve_id.get("member")]
-            else:
-                cve_id = cve_id.get("member")
-        else:
-            cve_id = []
-
-        category = x.get("category", None)
-        severity = x.get("severity", None)
-
-        min_version = None
-        max_version = None
-
-        engine_version = x.get("engine-version", None)
-        if engine_version is not None:
-            min_version = engine_version.get("@min", None)
-            max_version = engine_version.get("@max", None)
-
-        default_action = x.get("default-action", None)
-
-        affected_host = x.get("affected-host", None)
-        if affected_host is not None:
-            affected_host = list(affected_host.keys())
-
-        return VulnerabilitySignature(
-            threat_id,
-            threat_name,
-            vendor_id,
-            cve_id,
-            category,
-            severity,
-            min_version,
-            max_version,
-            affected_host,
-            default_action,
-        )
-
 
 class SecurityProfileGroup(
     namedtuple(
@@ -336,35 +283,6 @@ class SecurityProfileGroup(
         vulnerability = strip_empty(e.findtext(".//vulnerability/member"))
         url_filtering = strip_empty(e.findtext(".//url-filtering/member"))
         wildfire_analysis = strip_empty(e.findtext(".//wildfire-analysis/member"))
-
-        return SecurityProfileGroup(
-            name, virus, spyware, vulnerability, url_filtering, wildfire_analysis
-        )
-
-    @staticmethod
-    def create_from_xmldict(xmldict):
-        x = xmldict["entry"]
-
-        name = x.get("@name", None)
-        virus = x.get("virus", None)
-        if virus is not None:
-            virus = list(virus.values())[0]
-
-        spyware = x.get("spyware", None)
-        if spyware is not None:
-            spyware = list(spyware.values())[0]
-
-        vulnerability = x.get("vulnerability", None)
-        if vulnerability is not None:
-            vulnerability = list(vulnerability.values())[0]
-
-        url_filtering = x.get("url-filtering", None)
-        if url_filtering is not None:
-            url_filtering = list(url_filtering.values())[0]
-
-        wildfire_analysis = x.get("wildfire-analysis", None)
-        if wildfire_analysis is not None:
-            wildfire_analysis = list(wildfire_analysis.values())[0]
 
         return SecurityProfileGroup(
             name, virus, spyware, vulnerability, url_filtering, wildfire_analysis
