@@ -218,6 +218,7 @@ class VulnerabilitySignature(
 ):
     @staticmethod
     def create_from_element(e: Element) -> VulnerabilitySignature:
+        """ Create VulnerabilitySignature from XML element. """
         threat_id = e.get("name")
         threat_name = strip_empty(e.findtext("threatname"))
 
@@ -327,6 +328,7 @@ class SecurityProfileGroup(
 ):
     @staticmethod
     def create_from_element(e: Element) -> SecurityProfileGroup:
+        """ Create SecurityProfileGroup from XML element. """
         name = e.get("name")
 
         virus = strip_empty(e.findtext(".//virus/member"))

@@ -64,6 +64,7 @@ class DeviceGroup:
 
     @staticmethod
     def create_from_element(e: Element) -> DeviceGroup:
+        """ Create DeviceGroup from XML element. """
         name = e.get("name")
 
         vuln_profiles = {}
