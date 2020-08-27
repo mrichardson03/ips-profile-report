@@ -1,3 +1,6 @@
+__version__ = "0.1.0"
+
+
 def strip_empty(s: str) -> str:
     """ If s is empty, return None.
 
