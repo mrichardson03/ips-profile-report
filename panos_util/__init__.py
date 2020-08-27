@@ -1,4 +1,4 @@
-__version__ = "1.1.0.b1"
+__version__ = "2.0.0.b1"
 
 
 def strip_empty(s: str) -> str:
