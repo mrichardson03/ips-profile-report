@@ -7,29 +7,35 @@ from . import strip_empty
 
 
 class VulnerabilityProfile:
+    """ Class representing a vulnerability profile. """
+
     def __init__(self, name, rules):
         self.name = name
         self.rules = rules
 
-    def blocks_criticals(self):
+    def blocks_criticals(self) -> bool:
+        """ Returns True if this profile has a rule that blocks critical events. """
         for rule in self.rules:
             if rule.blocks_criticals():
                 return True
         return False
 
-    def blocks_high(self):
+    def blocks_high(self) -> bool:
+        """ Returns True if this profile has a rule that blocks high events. """
         for rule in self.rules:
             if rule.blocks_high():
                 return True
         return False
 
-    def blocks_medium(self):
+    def blocks_medium(self) -> bool:
+        """ Returns True if this profile has a rule that blocks medium events. """
         for rule in self.rules:
             if rule.blocks_medium():
                 return True
         return False
 
-    def alert_only(self):
+    def alert_only(self) -> bool:
+        """ Returns True if this profile has only alert rules. """
         if len(self.rules) > 0:
             for rule in self.rules:
                 if not rule.alert_only():
@@ -52,44 +58,64 @@ class VulnerabilityProfile:
 
 
 class DefaultVulnerabilityProfile(VulnerabilityProfile):
+    """
+    Class representing the vulnerability profile 'default'.
+
+    This profile does not actually exist in the config, so it is recreated here.
+    """
+
     def __init__(self):
         pass
 
     @property
-    def name(self):
+    def name(self) -> str:
         return "default"
 
-    def blocks_criticals(self):
+    def blocks_criticals(self) -> bool:
+        """ Returns True if this profile has a rule that blocks critical events. """
         return False
 
-    def blocks_high(self):
+    def blocks_high(self) -> bool:
+        """ Returns True if this profile has a rule that blocks high events. """
         return False
 
-    def blocks_medium(self):
+    def blocks_medium(self) -> bool:
+        """ Returns True if this profile has a rule that blocks medium events. """
         return False
 
-    def alert_only(self):
+    def alert_only(self) -> bool:
+        """ Returns True if this profile has only alert rules. """
         return False
 
 
 class StrictVulnerabilityProfile(VulnerabilityProfile):
+    """
+    Class representing the vulnerability profile 'strict'.
+
+    This profile does not actually exist in the config, so it is recreated here.
+    """
+
     def __init__(self):
         pass
 
     @property
-    def name(self):
+    def name(self) -> str:
         return "strict"
 
-    def blocks_criticals(self):
+    def blocks_criticals(self) -> bool:
+        """ Returns True if this profile has a rule that blocks critical events. """
         return True
 
-    def blocks_high(self):
+    def blocks_high(self) -> bool:
+        """ Returns True if this profile has a rule that blocks high events. """
         return True
 
-    def blocks_medium(self):
+    def blocks_medium(self) -> bool:
+        """ Returns True if this profile has a rule that blocks medium events. """
         return True
 
-    def alert_only(self):
+    def alert_only(self) -> bool:
+        """ Returns True if this profile has only alert rules. """
         return False
 
 
@@ -109,7 +135,10 @@ class VulnerabilityProfileRule(
         ],
     )
 ):
-    def blocks_criticals(self):
+    """ Class representing a rule in a vulnerability profile. """
+
+    def blocks_criticals(self) -> bool:
+        """ Returns True if a block action would be taken on critical events. """
         if self.severity is not None and "critical" in self.severity:
             if self.action is not None and self.action in [
                 "block-ip",
@@ -122,7 +151,8 @@ class VulnerabilityProfileRule(
 
         return False
 
-    def blocks_high(self):
+    def blocks_high(self) -> bool:
+        """ Returns True if a block action would be taken on high events. """
         if self.severity is not None and "high" in self.severity:
             if self.action is not None and self.action in [
                 "block-ip",
@@ -135,7 +165,8 @@ class VulnerabilityProfileRule(
 
         return False
 
-    def blocks_medium(self):
+    def blocks_medium(self) -> bool:
+        """ Returns True if a block action would be taken on medium events. """
         if self.severity is not None and "medium" in self.severity:
             if self.action is not None and self.action in [
                 "block-ip",
@@ -148,7 +179,8 @@ class VulnerabilityProfileRule(
 
         return False
 
-    def alert_only(self):
+    def alert_only(self) -> bool:
+        """ Returns True if an alert action would be taken on events. """
         if self.action == "alert":
             return True
         else:
@@ -210,6 +242,8 @@ class VulnerabilitySignature(
         ],
     )
 ):
+    """ Class representing a vulnerability signature. """
+
     @staticmethod
     def create_from_element(e: Element) -> VulnerabilitySignature:
         """ Create VulnerabilitySignature from XML element. """
@@ -267,6 +301,8 @@ class SecurityProfileGroup(
         ],
     )
 ):
+    """ Class representing a security profile group. """
+
     @staticmethod
     def create_from_element(e: Element) -> SecurityProfileGroup:
         """ Create SecurityProfileGroup from XML element. """
