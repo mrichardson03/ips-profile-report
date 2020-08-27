@@ -3,8 +3,23 @@ name = "panos-ips-reports"
 version = "1.1.0.b1"
 description = "Additional IPS reports for Palo Alto Networks firewalls"
 authors = ["Michael Richardson <mrichardson03@gmail.com>"]
+license = "Apache"
+keywords = ["panos"]
+readme = "README.md"
+homepage = "https://github.com/mrichardson03/panos-ips-reports"
+repository = "https://github.com/mrichardson03/panos-ips-reports"
+documentation = "https://github.com/mrichardson03/panos-ips-reports"
 packages = [
     { include = "panos_util" },
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Systems Administrators",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
 ]
 
 [tool.poetry.dependencies]
