@@ -13,6 +13,8 @@ from .policies import SecurityRule
 
 
 class Panorama:
+    """ Class representing Panorama. """
+
     def __init__(self, device_groups):
         self.device_groups = device_groups
 
@@ -39,6 +41,8 @@ class Panorama:
 
 
 class DeviceGroup:
+    """ Class representing a device group. """
+
     def __init__(self, name, rules, vuln_profiles, profile_groups, parent=None):
         self.name = name
         self.rules = rules

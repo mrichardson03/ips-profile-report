@@ -18,6 +18,8 @@ class SecurityRule(
         ],
     )
 ):
+    """ Class representing a security rule. """
+
     @staticmethod
     def create_from_element(e: Element) -> SecurityRule:
         """ Create SecurityRule from XML element. """

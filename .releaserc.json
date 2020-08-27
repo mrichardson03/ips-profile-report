@@ -21,10 +21,17 @@
             }
         ],
         [
+            "@semantic-release/changelog",
+            {
+                "changelogFile": "CHANGELOG.md"
+            }
+        ],
+        [
             "@semantic-release/git",
             {
                 "assets": [
                     "pyproject.toml",
+                    "CHANGELOG.md",
                     "README.md",
                     "panos_util/__init__.py"
                 ],
