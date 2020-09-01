@@ -114,7 +114,7 @@ def excel_output(output_file: str, p: Panorama):
             worksheet.write(row, 0, dg_name)
 
             # Total Rules
-            worksheet.write(row, 1, c["total_rules"], center_format)
+            worksheet.write(row, 1, c["total"], center_format)
 
             # Allow Rules
             worksheet.write(row, 2, c["allow"], center_format)
