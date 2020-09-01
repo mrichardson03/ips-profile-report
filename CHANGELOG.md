@@ -1,3 +1,10 @@
+## [2.0.0-beta.4](https://github.com/mrichardson03/panos-ips-reports/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2020-09-01)
+
+
+### Bug Fixes
+
+* Add debug statement for bad profile group ([e36b1d5](https://github.com/mrichardson03/panos-ips-reports/commit/e36b1d56fee7c207aad8b8e8ad756c594473d888))
+
 ## [2.0.0-beta.3](https://github.com/mrichardson03/panos-ips-reports/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2020-09-01)
 
 
