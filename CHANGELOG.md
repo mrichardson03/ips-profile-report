@@ -1,0 +1,7 @@
+## [2.0.0-beta.3](https://github.com/mrichardson03/panos-ips-reports/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2020-09-01)
+
+
+### Bug Fixes
+
+* Handle IOError when reading input file ([609d7a3](https://github.com/mrichardson03/panos-ips-reports/commit/609d7a3af142c3c462acee241a44354c92bdc7b7)), closes [#4](https://github.com/mrichardson03/panos-ips-reports/issues/4)
+* Total column was 0 for all device groups ([e15c8fb](https://github.com/mrichardson03/panos-ips-reports/commit/e15c8fba136ebb34ccf2ca4e3e052c1200de24b6))
