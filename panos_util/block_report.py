@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 import argparse
+import sys
 import tarfile
 import xml.etree.ElementTree as ElementTree
 
@@ -275,9 +276,15 @@ def main():
 
     args = parser.parse_args()
 
-    ts_file = tarfile.open(args.ts_file, mode="r:gz")
-    xml_file = ts_file.extractfile("./opt/pancfg/mgmt/saved-configs/running-config.xml")
-    xml_doc = xml_file.read()
+    try:
+        ts_file = tarfile.open(args.ts_file, mode="r:gz")
+        xml_file = ts_file.extractfile(
+            "./opt/pancfg/mgmt/saved-configs/running-config.xml"
+        )
+        xml_doc = xml_file.read()
+    except IOError as e:
+        print("I/O Error: {0}".format(e))
+        sys.exit(1)
 
     e = ElementTree.fromstring(xml_doc)
     p = Panorama.create_from_element(e)
