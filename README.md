@@ -43,6 +43,12 @@ $ block_progress_report <input_file> <output_file>
 - `input_file` - Panorama tech support file.
 - `output_file` - Excel file containing report.
 
+##### Example
+
+```bash
+$ block_progress_report ~/Downloads/20200901_1817_techsupport.tgz block_report.xlsx
+```
+
 ### threat_signature_report
 
 Produces a report on all the threat signatures in the current content version
@@ -51,7 +57,7 @@ of a firewall or Panorama.
 #### Usage
 
 ```bash
-threat_signature_report [-k | --api_key ] <hostname> <output_file>
+$ threat_signature_report [-k | --api_key ] <hostname> <output_file>
 ```
 
 ##### Required Arguments
@@ -63,3 +69,9 @@ threat_signature_report [-k | --api_key ] <hostname> <output_file>
 
 - `api_key` - API key to use for connection.  If this option is not specified,
 the user will be prompted for the username and password to use.
+
+##### Example
+
+```bash
+$ threat_signature_report 192.168.55.5 threat_sig_report.xlsx
+```
