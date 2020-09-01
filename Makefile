@@ -39,6 +39,7 @@ clean-test:
 	rm -f .coverage
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
+	rm -f *.xlsx
 
 lint:
 	flake8 *.py panos_util/ tests/
