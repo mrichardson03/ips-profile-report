@@ -467,7 +467,7 @@
                   <action>allow</action>
                   <disabled>yes</disabled>
                 </entry>
-                <entry name="local-critical" uuid="f43fd815-d293-4309-976b-7a2a3ee9fa1b">
+                <entry name="local-critical" uuid="71428fc4-46ea-40b1-a69c-a44f532e6d1d">
                   <profile-setting>
                     <profiles>
                       <vulnerability>
@@ -575,6 +575,120 @@
               </entry>
             </vulnerability>
           </profiles>
+          <profile-group/>
+        </entry>
+        <entry name="Nested-1">
+          <devices/>
+          <profile-group>
+            <entry name="Block-Strict-Nested">
+              <vulnerability>
+                <member>strict</member>
+              </vulnerability>
+            </entry>
+          </profile-group>
+        </entry>
+        <entry name="DG-2">
+          <devices type="array"/>
+          <pre-rulebase>
+            <security>
+              <rules>
+                <entry name="block-nested" uuid="c88c252e-ac2f-4837-8786-8b1115f4db47">
+                  <profile-setting>
+                    <group>
+                      <member>Block-Strict-Nested</member>
+                    </group>
+                  </profile-setting>
+                  <target>
+                    <negate>no</negate>
+                  </target>
+                  <to>
+                    <member>any</member>
+                  </to>
+                  <from>
+                    <member>any</member>
+                  </from>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <source-user>
+                    <member>any</member>
+                  </source-user>
+                  <category>
+                    <member>any</member>
+                  </category>
+                  <application>
+                    <member>any</member>
+                  </application>
+                  <service>
+                    <member>application-default</member>
+                  </service>
+                  <source-hip>
+                    <member>any</member>
+                  </source-hip>
+                  <destination-hip>
+                    <member>any</member>
+                  </destination-hip>
+                  <action>allow</action>
+                </entry>
+              </rules>
+            </security>
+          </pre-rulebase>
+        </entry>
+        <entry name="Nested-2">
+          <devices type="array"/>
+        </entry>
+        <entry name="DG-3">
+          <devices type="array"/>
+          <pre-rulebase>
+            <security>
+              <rules>
+                <entry name="block-strict" uuid="9b9a9501-7e46-4900-80ca-5e041917ea36">
+                  <profile-setting>
+                    <group>
+                      <member>Block-Strict-Nested</member>
+                    </group>
+                  </profile-setting>
+                  <target>
+                    <negate>no</negate>
+                  </target>
+                  <to>
+                    <member>any</member>
+                  </to>
+                  <from>
+                    <member>any</member>
+                  </from>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <source-user>
+                    <member>any</member>
+                  </source-user>
+                  <category>
+                    <member>any</member>
+                  </category>
+                  <application>
+                    <member>any</member>
+                  </application>
+                  <service>
+                    <member>application-default</member>
+                  </service>
+                  <source-hip>
+                    <member>any</member>
+                  </source-hip>
+                  <destination-hip>
+                    <member>any</member>
+                  </destination-hip>
+                  <action>allow</action>
+                </entry>
+              </rules>
+            </security>
+          </pre-rulebase>
         </entry>
       </device-group>
     </entry>
@@ -586,9 +700,24 @@
           <entry name="DG-1">
             <id>11</id>
           </entry>
+          <entry name="Nested-1">
+            <id>12</id>
+          </entry>
+          <entry name="DG-2">
+            <parent-dg>Nested-1</parent-dg>
+            <id>13</id>
+          </entry>
+          <entry name="Nested-2">
+            <parent-dg>Nested-1</parent-dg>
+            <id>14</id>
+          </entry>
+          <entry name="DG-3">
+            <parent-dg>Nested-2</parent-dg>
+            <id>15</id>
+          </entry>
         </device-group>
       </entry>
     </devices>
-    <max-internal-id>11</max-internal-id>
+    <max-internal-id>15</max-internal-id>
   </readonly>
 </config>

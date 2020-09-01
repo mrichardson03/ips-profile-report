@@ -126,3 +126,25 @@ def test_panorama_from_config():
     assert rule_counts["blocks_medium"] == 2
     assert rule_counts["disabled"] == 1
     assert rule_counts["drop"] == 1
+
+    dg = p.get_device_group("DG-2")
+    rule_counts = dg.rule_counts()
+
+    assert rule_counts["total"] == 1
+    assert rule_counts["alert_only"] == 0
+    assert rule_counts["blocks_criticals"] == 1
+    assert rule_counts["blocks_high"] == 1
+    assert rule_counts["blocks_medium"] == 1
+    assert rule_counts["disabled"] == 0
+    assert rule_counts["drop"] == 0
+
+    dg = p.get_device_group("DG-3")
+    rule_counts = dg.rule_counts()
+
+    assert rule_counts["total"] == 1
+    assert rule_counts["alert_only"] == 0
+    assert rule_counts["blocks_criticals"] == 1
+    assert rule_counts["blocks_high"] == 1
+    assert rule_counts["blocks_medium"] == 1
+    assert rule_counts["disabled"] == 0
+    assert rule_counts["drop"] == 0
