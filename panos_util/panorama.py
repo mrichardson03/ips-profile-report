@@ -114,7 +114,11 @@ class DeviceGroup:
         if group is not None:
             return self.resolve_profile(group.vulnerability)
         else:
-            return self.parent.resolve_profile_group(name)
+            if self.parent is not None:
+                return self.parent.resolve_profile_group(name)
+            else:
+                print("PROBLEM with profile: {0}".format(name))
+                return None
 
     @staticmethod
     def create_from_element(e: Element) -> DeviceGroup:
