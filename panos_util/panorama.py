@@ -34,8 +34,21 @@ class Panorama:
 
         for dg_e in e.findall("./devices/entry/device-group/"):
             dg_obj = DeviceGroup.create_from_element(dg_e)
-            dg_obj.parent = shared_obj
             device_groups.update({dg_obj.name: dg_obj})
+
+        # Properly set parent device group.
+        for parent_e in e.findall("./readonly/devices/entry/device-group/entry"):
+            dg_name = parent_e.get("name")
+            parent_name = parent_e.findtext(".//parent-dg")
+
+            # If no 'parent-dg' element was defined, parent is 'shared'.
+            if parent_name is None:
+                parent_name = "shared"
+
+            # Get parent object out of DG hash, set reference on current object.
+            dg = device_groups.get(dg_name)
+            parent_dg = device_groups.get(parent_name)
+            dg.parent_dg = parent_dg
 
         return Panorama(device_groups)
 
@@ -43,7 +56,7 @@ class Panorama:
 class DeviceGroup:
     """ Class representing a device group. """
 
-    def __init__(self, name, rules, vuln_profiles, profile_groups, parent=None):
+    def __init__(self, name, rules, vuln_profiles, profile_groups):
         self.name = name
         self.rules = rules
 
@@ -56,8 +69,16 @@ class DeviceGroup:
         self.vuln_profiles.update(vuln_profiles)
 
         self.profile_groups = profile_groups
-        self.parent = parent
+        self._parent_dg = None
         self._rule_counts = None
+
+    @property
+    def parent_dg(self):
+        return self._parent_dg
+
+    @parent_dg.setter
+    def parent_dg(self, value):
+        self._parent_dg = value
 
     def rule_counts(self, force_update=False) -> Counter:
         """ Returns a Counter object containing stats for this DeviceGroup. """
@@ -103,7 +124,7 @@ class DeviceGroup:
         profile = self.vuln_profiles.get(name, None)
 
         if profile is None:
-            return self.parent.resolve_profile(name)
+            return self.parent_dg.resolve_profile(name)
 
         return profile
 
@@ -114,11 +135,7 @@ class DeviceGroup:
         if group is not None:
             return self.resolve_profile(group.vulnerability)
         else:
-            if self.parent is not None:
-                return self.parent.resolve_profile_group(name)
-            else:
-                print("PROBLEM with profile: {0}".format(name))
-                return None
+            return self.parent_dg.resolve_profile_group(name)
 
     @staticmethod
     def create_from_element(e: Element) -> DeviceGroup:
