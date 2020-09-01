@@ -1,3 +1,10 @@
+## [2.0.0-beta.5](https://github.com/mrichardson03/panos-ips-reports/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2020-09-01)
+
+
+### Features
+
+* Support nested device groups. ([950d190](https://github.com/mrichardson03/panos-ips-reports/commit/950d190001844a807988199b21571ae798f353ac)), closes [#3](https://github.com/mrichardson03/panos-ips-reports/issues/3)
+
 ## [2.0.0-beta.4](https://github.com/mrichardson03/panos-ips-reports/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2020-09-01)
 
 
