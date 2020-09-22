@@ -1,3 +1,0 @@
-xmltodict
-xlsxwriter
-pan-python

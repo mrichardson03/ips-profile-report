@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "panos-ips-reports"
+version = "0.1.0"
+description = "Additional IPS reports for Palo Alto Networks firewalls"
+authors = ["Michael Richardson <mrichardson03@gmail.com>"]
+license = "Apache"
+keywords = ["panos"]
+readme = "README.md"
+homepage = "https://github.com/mrichardson03/panos-ips-reports"
+repository = "https://github.com/mrichardson03/panos-ips-reports"
+documentation = "https://github.com/mrichardson03/panos-ips-reports"
+packages = [
+    { include = "panos_util" },
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+xlsxwriter = "^1.3.3"
+pan-python = "^0.16.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.8.3"
+pytest = "^6.0.2"
+black = "^20.8b1"
+isort = "^5.5.3"
+coverage = "^5.3"
+
+[tool.poetry.scripts]
+block_progress_report = "panos_util.block_report:main"
+threat_signature_report = "panos_util.threat_report:main"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

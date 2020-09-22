@@ -1,112 +1,102 @@
-import xmltodict
+from __future__ import absolute_import, division, print_function
 
-from panos_util import VulnerabilitySignature
+import xml.etree.ElementTree as ElementTree
 
-STANDARD = """
-<entry name="31673" p="yes">
-    <threatname>SCADA ICCP Unauthorized MMS Write Request Attempt</threatname>
-    <vendor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <member>1111404</member>
-    </vendor>
-    <category>info-leak</category>
-    <severity>low</severity>
-    <engine-version min="5.0"/>
-    <affected-host>
-        <server>yes</server>
-    </affected-host>
-    <default-action>alert</default-action>
-</entry>
+from panos_util.objects import VulnerabilitySignature
+
+EMPTY = """
+<entry name="Empty"/>
 """
 
-NO_AFFECTED_HOST = """
-<entry name="57212" p="yes">
-    <threatname>
-        Advantech WebAccess SCADA bwrunmie.exe Policy Bypass Vulnerability
-    </threatname>
-    <cve xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <member>CVE-2019-13552</member>
-    </cve>
-    <category>code-execution</category>
-    <severity>high</severity>
-    <engine-version min="7.1"/>
+EMPTY_CHILD = """
+<entry name="Empty-Child">
+    <threatname/>
+    <vendor/>
+    <cve/>
+    <category/>
+    <severity/>
+    <engine-version/>
     <affected-host/>
-    <default-action>alert</default-action>
+    <default-action/>
 </entry>
 """
 
-NO_DEFAULT_ACTION = """
-<entry name="36944" p="yes">
-    <threatname>
-        Galil RIO 47100 PLC Denial of Service Vulnerability
-    </threatname>
-    <cve xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <member>CVE-2013-0699</member>
+SINGLE_CHILD = """
+<entry name="Single-Child">
+    <vendor>
+        <member>one</member>
+    </vendor>
+    <cve>
+        <member>one</member>
     </cve>
-    <category>dos</category>
-    <severity>high</severity>
-    <engine-version min="4.0"/>
     <affected-host>
         <server>yes</server>
     </affected-host>
 </entry>
 """
 
-MULTI_CVE = """
-<entry name="40834" p="yes">
-    <threatname>
-        Quest NetVault Backup Multipart Request Part Header Stack Buffer Overflow Vulnerability
-    </threatname>
-    <cve xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <member>CVE-2017-17652</member>
-        <member>CVE-2017-17412</member>
-        <member>CVE-2018-1163</member>
-        <member>CVE-2018-1162</member>
-        <member>CVE-2017-17419</member>
-        <member>CVE-2017-17420</member>
+MULTI_CHILD = """
+<entry name="Multi-Child">
+    <vendor>
+        <member>one</member>
+        <member>two</member>
+    </vendor>
+    <cve>
+        <member>one</member>
+        <member>two</member>
     </cve>
-    <category>overflow</category>
-    <severity>critical</severity>
-    <engine-version min="6.1"/>
+    <engine-version min="1.0" max="2.0"/>
     <affected-host>
         <server>yes</server>
+        <client>yes</client>
     </affected-host>
-    <default-action>reset-server</default-action>
 </entry>
 """
 
-def test_standard_sig():
-    xmldict = xmltodict.parse(STANDARD)
-    sig = VulnerabilitySignature.create_from_xmldict(xmldict)
 
-    assert sig.name == "SCADA ICCP Unauthorized MMS Write Request Attempt"
-    assert sig.threat_id == "31673"
+def test_empty():
+    e = ElementTree.fromstring(EMPTY)
+    sig = VulnerabilitySignature.create_from_element(e)
 
-
-def test_no_affected_host():
-    xmldict = xmltodict.parse(NO_AFFECTED_HOST)
-    sig = VulnerabilitySignature.create_from_xmldict(xmldict)
-
-    assert sig.name == "Advantech WebAccess SCADA bwrunmie.exe Policy Bypass Vulnerability"
-    assert sig.threat_id == "57212"
-    assert sig.affected_host is None
-
-
-def test_no_default_action():
-    xmldict = xmltodict.parse(NO_DEFAULT_ACTION)
-    sig = VulnerabilitySignature.create_from_xmldict(xmldict)
-
-    assert sig.name == "Galil RIO 47100 PLC Denial of Service Vulnerability"
-    assert sig.threat_id == "36944"
+    assert sig.name is None
+    assert sig.vendor_id == []
+    assert sig.cve_id == []
+    assert sig.category is None
+    assert sig.severity is None
+    assert sig.min_version is None
+    assert sig.max_version is None
+    assert sig.affected_host == []
     assert sig.default_action is None
 
 
-def test_multi_cve():
-    xmldict = xmltodict.parse(MULTI_CVE)
-    sig = VulnerabilitySignature.create_from_xmldict(xmldict)
+def test_empty_child():
+    e = ElementTree.fromstring(EMPTY_CHILD)
+    sig = VulnerabilitySignature.create_from_element(e)
 
-    assert sig.name == "Quest NetVault Backup Multipart Request Part Header Stack Buffer Overflow Vulnerability"
-    assert sig.threat_id == "40834"
-    assert sig.cve_id == [
-        "CVE-2017-17652", "CVE-2017-17412", "CVE-2018-1163",
-        "CVE-2018-1162", "CVE-2017-17419", "CVE-2017-17420"
-    ]
+    assert sig.name is None
+    assert sig.vendor_id == []
+    assert sig.cve_id == []
+    assert sig.category is None
+    assert sig.severity is None
+    assert sig.min_version is None
+    assert sig.max_version is None
+    assert sig.affected_host == []
+    assert sig.default_action is None
+
+
+def test_single_child():
+    e = ElementTree.fromstring(SINGLE_CHILD)
+    sig = VulnerabilitySignature.create_from_element(e)
+
+    assert sig.vendor_id == ["one"]
+    assert sig.cve_id == ["one"]
+    assert sig.affected_host == ["server"]
+
+
+def test_multi_child():
+    e = ElementTree.fromstring(MULTI_CHILD)
+    sig = VulnerabilitySignature.create_from_element(e)
+
+    assert sig.vendor_id == ["one", "two"]
+    assert sig.cve_id == ["one", "two"]
+    assert sig.affected_host == ["server", "client"]
