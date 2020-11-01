@@ -82,6 +82,17 @@ jobs:
       - name: Check formatting
         run: poetry run make check-format
 
+  automerge:
+    name: Auto-merge
+    needs: [test, format]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-merge pull requests from dependabot (patches only)
+        uses: ridedott/merge-me-action@master
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PRESET: DEPENDABOT_PATCH
+
   release:
     name: Release
     if: github.event_name == 'push' && github.ref != 'refs/heads/develop'
