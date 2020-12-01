@@ -61,8 +61,8 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Install poetry
-        uses: dschep/install-poetry-action@v1.3
+      - name: Install Poetry
+        uses: Gr1N/setup-poetry@v4
 
       - name: Get poetry cache directory
         id: poetry-cache
@@ -109,7 +109,7 @@ jobs:
           python-version: 3.8
 
       - name: Install Poetry
-        uses: dschep/install-poetry-action@v1.3
+        uses: Gr1N/setup-poetry@v4
 
       - name: Get poetry cache directory
         id: poetry-cache
