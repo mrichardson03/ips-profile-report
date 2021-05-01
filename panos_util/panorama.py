@@ -13,18 +13,18 @@ from .policies import SecurityRule
 
 
 class Panorama:
-    """ Class representing Panorama. """
+    """Class representing Panorama."""
 
     def __init__(self, device_groups):
         self.device_groups = device_groups
 
     def get_device_group(self, name: str) -> DeviceGroup:
-        """ Gets a DeviceGroup object by name. """
+        """Gets a DeviceGroup object by name."""
         return self.device_groups.get(name, None)
 
     @staticmethod
     def create_from_element(e: Element) -> Panorama:
-        """ Create Panorama object from XML element. """
+        """Create Panorama object from XML element."""
         device_groups = {}
 
         shared_e = e.find("./shared")
@@ -54,7 +54,7 @@ class Panorama:
 
 
 class DeviceGroup:
-    """ Class representing a device group. """
+    """Class representing a device group."""
 
     def __init__(self, name, rules, vuln_profiles, profile_groups):
         self.name = name
@@ -81,7 +81,7 @@ class DeviceGroup:
         self._parent_dg = value
 
     def rule_counts(self, force_update=False) -> Counter:
-        """ Returns a Counter object containing stats for this DeviceGroup. """
+        """Returns a Counter object containing stats for this DeviceGroup."""
         if self._rule_counts is None:
             self._rule_counts = Counter()
             self._update_rule_counts()
@@ -92,7 +92,7 @@ class DeviceGroup:
         return self._rule_counts
 
     def _update_rule_counts(self) -> None:
-        """ Recalculates the rule stats for this DeviceGroup. """
+        """Recalculates the rule stats for this DeviceGroup."""
         for rule in self.rules:
             self._rule_counts["total"] += 1
 
@@ -120,7 +120,7 @@ class DeviceGroup:
                 self._rule_counts["disabled"] += 1
 
     def resolve_profile(self, name: str) -> VulnerabilityProfile:
-        """ Looks up a VulnerabiltyProfile by name. """
+        """Looks up a VulnerabiltyProfile by name."""
         profile = self.vuln_profiles.get(name, None)
 
         if profile is None:
@@ -129,7 +129,7 @@ class DeviceGroup:
         return profile
 
     def resolve_profile_group(self, name: str) -> VulnerabilityProfile:
-        """ Looks up a VulnerabilityProfile by SecurityProfileGroup name. """
+        """Looks up a VulnerabilityProfile by SecurityProfileGroup name."""
         group = self.profile_groups.get(name, None)
 
         if group is not None:
@@ -139,7 +139,7 @@ class DeviceGroup:
 
     @staticmethod
     def create_from_element(e: Element) -> DeviceGroup:
-        """ Create DeviceGroup from XML element. """
+        """Create DeviceGroup from XML element."""
         name = e.get("name")
 
         vuln_profiles = {}
