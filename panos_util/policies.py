@@ -18,11 +18,11 @@ class SecurityRule(
         ],
     )
 ):
-    """ Class representing a security rule. """
+    """Class representing a security rule."""
 
     @staticmethod
     def create_from_element(e: Element) -> SecurityRule:
-        """ Create SecurityRule from XML element. """
+        """Create SecurityRule from XML element."""
         name = e.get("name")
         action = strip_empty(e.findtext("action"))
 
