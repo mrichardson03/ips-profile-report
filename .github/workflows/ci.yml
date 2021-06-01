@@ -37,7 +37,7 @@ jobs:
         run: echo "::set-output name=dir::$(poetry config cache-dir)"
 
       - name: Cache poetry
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: ${{ steps.poetry-cache.outputs.dir }}
           key: ${{ runner.os }}-poetry-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
@@ -69,7 +69,7 @@ jobs:
         run: echo "::set-output name=dir::$(poetry config cache-dir)"
 
       - name: Cache poetry
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: ${{ steps.poetry-cache.outputs.dir }}
           key: ${{ runner.os }}-poetry-3.8-${{ hashFiles('**/poetry.lock') }}
@@ -116,7 +116,7 @@ jobs:
         run: echo "::set-output name=dir::$(poetry config cache-dir)"
 
       - name: Cache poetry
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: ${{ steps.poetry-cache.outputs.dir }}
           key: ${{ runner.os }}-poetry-3.8-${{ hashFiles('**/poetry.lock') }}
