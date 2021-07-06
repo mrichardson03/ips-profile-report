@@ -31,7 +31,7 @@ pan-python = "^0.16.0"
 flake8 = "^3.9.2"
 pytest = "^6.2.4"
 black = "^21.5b2"
-isort = "^5.8.0"
+isort = "^5.9.1"
 coverage = "^5.5"
 
 [tool.poetry.scripts]
